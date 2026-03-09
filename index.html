@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Riska Ayu Kusumaningrum — Frontend Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --bg:#090e1a;--surface:#0f1624;--surface2:#151d2e;
+      --accent:#38bdf8;--accent2:#818cf8;--gold:#fbbf24;
+      --text:#e2e8f0;--sub:#94a3b8;--muted:#475569;
+      --border:rgba(56,189,248,0.13);--nav-h:68px;--radius:16px;
+    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;line-height:1.7;overflow-x:hidden;cursor:none}
+    section,header{scroll-margin-top:calc(var(--nav-h) + 12px)}
+
+    /* CURSOR */
+    #cursor-dot{position:fixed;width:8px;height:8px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .15s,height .15s,background .2s;box-shadow:0 0 10px rgba(56,189,248,.8)}
+    #cursor-ring{position:fixed;width:36px;height:36px;border:1.5px solid rgba(56,189,248,.5);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .35s cubic-bezier(.23,1,.32,1),height .35s cubic-bezier(.23,1,.32,1),border-color .25s,background .25s}
+    body.cursor-hover #cursor-dot{width:12px;height:12px;background:var(--accent2);box-shadow:0 0 18px rgba(129,140,248,.9)}
+    body.cursor-hover #cursor-ring{width:56px;height:56px;border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.04)}
+    body.cursor-click #cursor-dot{width:6px;height:6px;background:white}
+    body.cursor-click #cursor-ring{width:28px;height:28px;border-color:rgba(255,255,255,.6)}
+    input,textarea{cursor:text}
+    a,button{cursor:none}
+
+    /* NAVBAR */
+    .navbar{height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 7%;position:sticky;top:0;z-index:200;background:rgba(9,14,26,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    .logo{font-size:1rem;font-weight:700;color:var(--accent);letter-spacing:.01em;white-space:nowrap;transition:color .25s,letter-spacing .3s;text-decoration:none}
+    .logo:hover{color:#fff;letter-spacing:.08em}
+    .nav-links{display:flex;gap:24px;list-style:none}
+    .nav-links a{text-decoration:none;color:var(--sub);font-size:.8rem;font-weight:500;letter-spacing:.03em;position:relative;padding-bottom:3px;transition:color .25s}
+    .nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1.5px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .3s ease}
+    .nav-links a:hover,.nav-links a.active{color:var(--accent)}
+    .nav-links a:hover::after,.nav-links a.active::after{width:100%}
+
+    /* NAVBAR DOWNLOAD BUTTON */
+    .btn-nav-cv{display:inline-flex;align-items:center;gap:8px;padding:9px 20px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:var(--bg);font-family:inherit;font-size:.8rem;font-weight:700;letter-spacing:.04em;border:none;border-radius:100px;text-decoration:none;position:relative;overflow:hidden;transition:transform .3s,box-shadow .3s;box-shadow:0 4px 20px rgba(56,189,248,.3);white-space:nowrap}
+    .btn-nav-cv::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--accent2),var(--accent));opacity:0;transition:opacity .3s}
+    .btn-nav-cv:hover{transform:translateY(-2px) scale(1.04);box-shadow:0 10px 32px rgba(56,189,248,.45)}
+    .btn-nav-cv:hover::before{opacity:1}
+    .btn-nav-cv i,.btn-nav-cv span{position:relative;z-index:1}
+    .btn-nav-cv i{animation:bounce-down 1.6s ease-in-out infinite}
+    @keyframes bounce-down{0%,100%{transform:translateY(0)}50%{transform:translateY(3px)}}
+
+    /* HERO */
+    .hero{min-height:calc(100vh - var(--nav-h));display:flex;align-items:center;padding:80px 7% 60px;position:relative;overflow:hidden}
+    .hero-glow{position:absolute;border-radius:50%;pointer-events:none}
+    .hero-glow-1{top:-160px;right:-160px;width:500px;height:500px;background:radial-gradient(circle,rgba(56,189,248,.08) 0%,transparent 70%);animation:glow-pulse 9s ease-in-out infinite}
+    .hero-glow-2{bottom:-100px;left:5%;width:380px;height:380px;background:radial-gradient(circle,rgba(129,140,248,.06) 0%,transparent 70%);animation:glow-pulse 12s ease-in-out infinite reverse}
+    @keyframes glow-pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.2);opacity:.5}}
+    .hero-inner{display:flex;align-items:center;justify-content:space-between;gap:60px;width:100%;max-width:1200px;margin:auto;position:relative;z-index:1}
+    .hero-left{flex:1 1 480px}
+    .hero-badge{display:inline-flex;align-items:center;gap:7px;padding:5px 14px;background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.22);border-radius:100px;font-size:.72rem;font-weight:600;color:var(--accent);letter-spacing:.09em;text-transform:uppercase;margin-bottom:22px;animation:fadein .7s ease both;transition:background .3s,box-shadow .3s}
+    .hero-badge:hover{background:rgba(56,189,248,.14);box-shadow:0 0 16px rgba(56,189,248,.15)}
+    .hero-badge-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:blink 2s infinite}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.15}}
+    .hero-name{font-size:clamp(1.9rem,4vw,3.2rem);font-weight:800;line-height:1.1;letter-spacing:-.025em;margin-bottom:14px;animation:fadein .7s .08s ease both}
+    .hero-name .hl{background:linear-gradient(120deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;background-size:200%;animation:grad-shift 6s ease infinite}
+    @keyframes grad-shift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+    .hero-role{font-size:.95rem;font-weight:400;color:var(--sub);letter-spacing:.04em;margin-bottom:18px;animation:fadein .7s .15s ease both}
+    .hero-desc{font-size:.88rem;line-height:1.85;color:var(--sub);max-width:480px;margin-bottom:32px;animation:fadein .7s .22s ease both}
+    .hero-socials{display:flex;gap:10px;animation:fadein .7s .3s ease both}
+    .social-btn{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:1.5px solid rgba(255,255,255,.1);border-radius:12px;color:var(--sub);font-size:1rem;text-decoration:none;position:relative;overflow:hidden;transition:color .3s,border-color .3s,transform .3s,box-shadow .3s}
+    .social-btn::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;border-radius:11px}
+    .social-btn:hover{transform:translateY(-5px) scale(1.08)}
+    .social-btn:hover::before{opacity:1}
+    .social-btn i{position:relative;z-index:1}
+    .s-gh:hover{border-color:#e2e8f0;color:#e2e8f0;box-shadow:0 8px 24px rgba(255,255,255,.12)}.s-gh::before{background:rgba(255,255,255,.06)}
+    .s-li:hover{border-color:#0a66c2;color:#0a66c2;box-shadow:0 8px 24px rgba(10,102,194,.3)}.s-li::before{background:rgba(10,102,194,.08)}
+    .s-em:hover{border-color:#ea4335;color:#ea4335;box-shadow:0 8px 24px rgba(234,67,53,.3)}.s-em::before{background:rgba(234,67,53,.08)}
+    .s-wa:hover{border-color:#25d366;color:#25d366;box-shadow:0 8px 24px rgba(37,211,102,.3)}.s-wa::before{background:rgba(37,211,102,.08)}
+
+    /* HERO ILLUSTRATION */
+    .hero-right{flex:0 0 auto;animation:fadein .7s .15s ease both}
+    .hero-illus-wrap{position:relative;width:380px;height:380px;display:flex;align-items:center;justify-content:center}
+    .illus-orbit{position:absolute;inset:0;border:1.5px dashed rgba(56,189,248,.15);border-radius:50%;animation:spin 30s linear infinite}
+    .illus-orbit-2{position:absolute;inset:28px;border:1px dashed rgba(129,140,248,.1);border-radius:50%;animation:spin 20s linear infinite reverse}
+    .illus-monitor{position:relative;z-index:5;animation:float 5s ease-in-out infinite}
+    .illus-screen{width:200px;background:linear-gradient(135deg,#0d1829,#162240);border:1.5px solid rgba(56,189,248,.35);border-radius:14px;padding:14px 16px 12px;box-shadow:0 0 50px rgba(56,189,248,.12),0 20px 50px rgba(0,0,0,.6),inset 0 1px 0 rgba(56,189,248,.1)}
+    .illus-dots{display:flex;gap:5px;margin-bottom:11px}
+    .illus-dots span{width:7px;height:7px;border-radius:50%}
+    .illus-dots span:nth-child(1){background:#ff5f57}.illus-dots span:nth-child(2){background:#febc2e}.illus-dots span:nth-child(3){background:#28c840}
+    .illus-code{display:flex;flex-direction:column;gap:7px}
+    .code-line{height:6px;border-radius:4px}
+    .cl-1{width:75%;background:linear-gradient(90deg,#e34f26,#f06529);animation:code-glow 2.5s ease-in-out infinite 0s}
+    .cl-2{width:55%;background:rgba(56,189,248,.5);animation:code-glow 2.5s ease-in-out infinite .2s}
+    .cl-3{width:85%;background:rgba(129,140,248,.5);animation:code-glow 2.5s ease-in-out infinite .4s}
+    .cl-4{width:40%;background:rgba(56,189,248,.35);animation:code-glow 2.5s ease-in-out infinite .6s}
+    .cl-5{width:65%;background:linear-gradient(90deg,#264de4,#2965f1);animation:code-glow 2.5s ease-in-out infinite .8s}
+    .cl-6{width:50%;background:rgba(129,140,248,.4);animation:code-glow 2.5s ease-in-out infinite 1s}
+    .cl-7{width:30%;background:rgba(56,189,248,.25);animation:code-glow 2.5s ease-in-out infinite 1.2s}
+    @keyframes code-glow{0%,100%{opacity:.45}50%{opacity:1}}
+    .illus-stand{width:40px;height:8px;background:linear-gradient(90deg,rgba(56,189,248,.15),rgba(56,189,248,.4),rgba(56,189,248,.15));border-radius:4px;margin:0 auto;clip-path:polygon(10% 0%,90% 0%,100% 100%,0% 100%)}
+    .illus-base{width:68px;height:5px;background:rgba(56,189,248,.15);border-radius:4px;margin:0 auto}
+    .illus-float{position:absolute;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(10px);z-index:6}
+    .illus-gear-big{top:22px;right:26px;width:54px;height:54px;background:rgba(56,189,248,.08);border:1.5px solid rgba(56,189,248,.22);border-radius:50%;font-size:1.5rem;color:rgba(56,189,248,.75);animation:spin 10s linear infinite}
+    .illus-gear-sm{top:66px;right:68px;width:28px;height:28px;background:rgba(129,140,248,.08);border:1px solid rgba(129,140,248,.2);border-radius:50%;font-size:.75rem;color:rgba(129,140,248,.7);animation:spin 7s linear infinite reverse}
+    .illus-cloud{top:46px;left:18px;padding:10px 13px;background:rgba(129,140,248,.1);border:1.5px solid rgba(129,140,248,.3);border-radius:12px;font-size:1.1rem;color:rgba(129,140,248,.85);animation:float-a 6s ease-in-out infinite;box-shadow:0 8px 24px rgba(129,140,248,.12)}
+    .illus-tag{bottom:88px;left:10px;padding:9px 13px;background:rgba(56,189,248,.1);border:1.5px solid rgba(56,189,248,.3);border-radius:12px;font-family:'Courier New',monospace;font-size:.8rem;font-weight:700;color:var(--accent);animation:float-b 4.5s ease-in-out infinite;box-shadow:0 8px 24px rgba(56,189,248,.15)}
+    .illus-mobile{bottom:58px;right:14px;width:40px;height:62px;background:linear-gradient(135deg,rgba(129,140,248,.15),rgba(56,189,248,.1));border:1.5px solid rgba(129,140,248,.35);border-radius:10px;animation:float-c 5.5s ease-in-out infinite;box-shadow:0 8px 24px rgba(129,140,248,.15)}
+    .illus-mobile::before{content:'';position:absolute;top:8px;left:50%;transform:translateX(-50%);width:14px;height:2px;background:rgba(129,140,248,.5);border-radius:2px}
+    .illus-mobile::after{content:'';position:absolute;bottom:7px;left:50%;transform:translateX(-50%);width:11px;height:11px;border:1.5px solid rgba(129,140,248,.5);border-radius:50%}
+    .illus-check{bottom:16px;left:50%;transform:translateX(-50%);width:36px;height:36px;background:rgba(16,185,129,.1);border:1.5px solid rgba(16,185,129,.3);border-radius:50%;font-size:.85rem;color:#10b981;animation:float-b 7s ease-in-out infinite}
+    @keyframes float-a{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+    @keyframes float-b{0%,100%{transform:translateY(-5px)}50%{transform:translateY(5px)}}
+    @keyframes float-c{0%,100%{transform:translateY(0)}50%{transform:translateY(-11px)}}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @keyframes spin-slow{to{transform:rotate(360deg)}}
+    @keyframes fadein{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+
+    /* SECTIONS */
+    .section{padding:88px 7%}.section-alt{background:var(--surface)}
+    .sec-eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+    .sec-title{font-size:clamp(1.3rem,2.4vw,1.85rem);font-weight:800;letter-spacing:-.02em;color:var(--text);margin-bottom:44px}
+
+    /* ABOUT */
+    .about-grid{display:grid;grid-template-columns:200px 1fr;gap:52px;align-items:start}
+    .about-img-wrap{position:relative}
+    .about-img-wrap img{width:100%;border-radius:20px;border:1px solid var(--border);display:block;filter:grayscale(20%);transition:filter .5s,transform .5s,box-shadow .5s}
+    .about-img-wrap:hover img{filter:none;transform:scale(1.03);box-shadow:0 20px 60px rgba(56,189,248,.2)}
+    .about-img-wrap::after{content:'';position:absolute;inset:-2px;border-radius:22px;background:linear-gradient(135deg,var(--accent),var(--accent2),transparent 70%);z-index:-1;opacity:.3;transition:opacity .4s}
+    .about-img-wrap:hover::after{opacity:.6}
+    .about-text p{font-size:.88rem;color:var(--sub);line-height:1.9;margin-bottom:16px}
+    .about-text p strong{color:var(--accent);font-weight:600}
+    .about-chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+    .about-chip{display:inline-flex;align-items:center;gap:10px;padding:10px 15px;background:rgba(12,18,32,.92);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:14px;box-shadow:0 6px 22px rgba(0,0,0,.35);transition:transform .3s cubic-bezier(.23,1,.32,1),box-shadow .3s,border-color .3s;white-space:nowrap}
+    .about-chip:hover{transform:translateY(-5px) scale(1.04)}
+    .about-chip.ac-html{border-color:rgba(227,79,38,.3)}.about-chip.ac-html:hover{border-color:rgba(227,79,38,.65);box-shadow:0 14px 32px rgba(227,79,38,.2)}
+    .about-chip.ac-css{border-color:rgba(38,77,228,.3)}.about-chip.ac-css:hover{border-color:rgba(38,77,228,.65);box-shadow:0 14px 32px rgba(38,77,228,.2)}
+    .about-chip.ac-react{border-color:rgba(56,189,248,.3)}.about-chip.ac-react:hover{border-color:rgba(56,189,248,.65);box-shadow:0 14px 32px rgba(56,189,248,.2)}
+    .ac-icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:5px}
+    .ac-icon img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 2px 5px rgba(0,0,0,.3))}
+    .about-chip.ac-html .ac-icon{background:rgba(227,79,38,.15);border:1.5px solid rgba(227,79,38,.3);animation:spin-slow 12s linear infinite}
+    .about-chip.ac-css .ac-icon{background:rgba(38,77,228,.15);border:1.5px solid rgba(38,77,228,.3);animation:spin-slow 14s linear infinite reverse}
+    .about-chip.ac-react .ac-icon{background:rgba(56,189,248,.12);border:1.5px solid rgba(56,189,248,.25);animation:spin-slow 10s linear infinite}
+    .ac-text strong{display:block;font-size:.76rem;color:var(--text);font-weight:700;line-height:1.2}
+    .ac-text span{font-size:.63rem;color:var(--muted)}
+
+    /* CV BUTTON GROUP */
+    .cv-btn-group{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+    .btn-cv-preview{display:inline-flex;align-items:center;gap:9px;padding:13px 26px;background:transparent;border:1.5px solid rgba(56,189,248,.45);color:var(--accent);font-family:inherit;font-size:.86rem;font-weight:700;border-radius:100px;cursor:none;position:relative;overflow:hidden;transition:transform .3s,box-shadow .3s,border-color .3s,color .3s}
+    .btn-cv-preview::before{content:'';position:absolute;inset:0;background:rgba(56,189,248,.08);transform:scaleX(0);transform-origin:left;transition:transform .35s ease}
+    .btn-cv-preview:hover{transform:translateY(-4px);box-shadow:0 12px 36px rgba(56,189,248,.2);border-color:var(--accent)}
+    .btn-cv-preview:hover::before{transform:scaleX(1)}
+    .btn-cv-preview i,.btn-cv-preview span{position:relative;z-index:1}
+    .btn-cv-download{display:inline-flex;align-items:center;gap:9px;padding:13px 26px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:var(--bg);font-family:inherit;font-size:.86rem;font-weight:700;border:none;border-radius:100px;text-decoration:none;position:relative;overflow:hidden;transition:transform .3s,box-shadow .3s;box-shadow:0 6px 28px rgba(56,189,248,.28)}
+    .btn-cv-download::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--accent2),var(--accent));opacity:0;transition:opacity .3s}
+    .btn-cv-download:hover{transform:translateY(-4px) scale(1.03);box-shadow:0 16px 44px rgba(56,189,248,.4)}
+    .btn-cv-download:hover::before{opacity:1}
+    .btn-cv-download i,.btn-cv-download span{position:relative;z-index:1}
+    .btn-cv-download i{animation:bounce-down 1.6s ease-in-out infinite}
+
+    /* CV MODAL */
+    .cv-modal-overlay{display:none;position:fixed;inset:0;z-index:9000;background:rgba(4,8,18,.92);backdrop-filter:blur(18px);align-items:center;justify-content:center;padding:20px}
+    .cv-modal-overlay.open{display:flex;animation:overlay-in .3s ease}
+    @keyframes overlay-in{from{opacity:0}to{opacity:1}}
+    .cv-modal{background:var(--surface2);border:1px solid rgba(56,189,248,.22);border-radius:24px;width:100%;max-width:900px;max-height:92vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 50px 120px rgba(0,0,0,.8),0 0 0 1px rgba(56,189,248,.08);animation:modal-up .4s cubic-bezier(.23,1,.32,1)}
+    @keyframes modal-up{from{opacity:0;transform:translateY(40px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+    .cv-modal-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 22px;border-bottom:1px solid rgba(56,189,248,.1);background:rgba(9,14,26,.6);flex-shrink:0}
+    .cv-modal-bar-left{display:flex;align-items:center;gap:13px}
+    .cv-modal-icon{width:40px;height:40px;border-radius:12px;background:rgba(56,189,248,.1);border:1.5px solid rgba(56,189,248,.25);display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:var(--accent);flex-shrink:0}
+    .cv-modal-title{font-size:.88rem;font-weight:700;color:var(--text);line-height:1.2}
+    .cv-modal-subtitle{font-size:.68rem;color:var(--muted);margin-top:2px}
+    .cv-modal-bar-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+    .btn-modal-dl{display:inline-flex;align-items:center;gap:8px;padding:9px 20px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:var(--bg);font-family:inherit;font-size:.78rem;font-weight:700;border:none;border-radius:100px;text-decoration:none;transition:transform .25s,box-shadow .25s;box-shadow:0 4px 18px rgba(56,189,248,.3)}
+    .btn-modal-dl:hover{transform:scale(1.05);box-shadow:0 8px 28px rgba(56,189,248,.45)}
+    .btn-modal-close{width:36px;height:36px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;color:var(--sub);font-size:1rem;cursor:none;display:flex;align-items:center;justify-content:center;transition:background .25s,color .25s,transform .25s}
+    .btn-modal-close:hover{background:rgba(239,68,68,.15);color:#ef4444;transform:scale(1.1) rotate(90deg)}
+    .cv-modal-body{flex:1;overflow:hidden;min-height:0;background:#1a1a2e;position:relative}
+    .cv-modal-body iframe{width:100%;height:100%;min-height:560px;border:none;display:block}
+    .cv-pdf-fallback{display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:60px 24px;text-align:center;height:100%}
+    .cv-pdf-fallback-icon{font-size:3.5rem;color:rgba(56,189,248,.4)}
+    .cv-pdf-fallback h4{font-size:1rem;font-weight:700;color:var(--text)}
+    .cv-pdf-fallback p{font-size:.82rem;color:var(--sub);max-width:340px;line-height:1.7}
+    .cv-modal-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 22px;border-top:1px solid rgba(56,189,248,.08);background:rgba(9,14,26,.5);flex-shrink:0}
+    .cv-modal-footer-info{display:flex;align-items:center;gap:6px;font-size:.68rem;color:var(--muted)}
+    .cv-modal-footer-info i{font-size:.6rem;color:var(--accent);opacity:.7}
+    .cv-verified-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);border-radius:100px;font-size:.63rem;font-weight:700;color:#10b981}
+    .cv-verified-badge::before{content:'';width:5px;height:5px;background:#10b981;border-radius:50%}
+
+    /* TIMELINE */
+    .timeline-wrap{position:relative;max-width:1060px;margin:0 auto;padding:10px 0 20px}
+    .timeline-wrap::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,transparent 0%,rgba(56,189,248,.25) 5%,rgba(56,189,248,.25) 95%,transparent 100%);transform:translateX(-50%);z-index:0}
+    .tl-item{display:grid;grid-template-columns:1fr 48px 1fr;align-items:start;margin-bottom:56px;position:relative}
+    .tl-item.left .tl-card{grid-column:1}.tl-item.right .tl-card{grid-column:3}
+    .tl-item.left .tl-mid{grid-column:2;grid-row:1}.tl-item.right .tl-mid{grid-column:2;grid-row:1}
+    .tl-mid{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:24px;position:relative;z-index:2}
+    .tl-date-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);border-radius:100px;font-size:.63rem;font-weight:700;color:var(--accent);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;margin-bottom:10px}
+    .tl-dot{width:12px;height:12px;background:var(--bg);border:2.5px solid var(--accent);border-radius:50%;box-shadow:0 0 10px rgba(56,189,248,.55);transition:transform .3s,box-shadow .3s;flex-shrink:0}
+    .tl-item:hover .tl-dot{transform:scale(1.5);box-shadow:0 0 22px rgba(56,189,248,.9)}
+    .tl-card{background:var(--surface2);border:1px solid var(--border);border-radius:18px;padding:22px 24px;position:relative;overflow:hidden;transition:transform .35s cubic-bezier(.23,1,.32,1),box-shadow .35s,border-color .3s}
+    .tl-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));transform:scaleX(0);transform-origin:left;transition:transform .4s;border-radius:18px 18px 0 0}
+    .tl-card .shimmer{position:absolute;top:-60%;left:-70%;width:45%;height:200%;background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.045) 50%,transparent 62%);transform:rotate(18deg);pointer-events:none;transition:left .65s ease}
+    .tl-card:hover{transform:translateY(-7px);box-shadow:0 22px 56px rgba(0,0,0,.5);border-color:rgba(56,189,248,.28)}
+    .tl-card:hover::before{transform:scaleX(1)}.tl-card:hover .shimmer{left:140%}
+    .tl-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:12px}
+    .tl-initial{width:36px;height:36px;border-radius:50%;background:#1e2a3a;border:1px solid rgba(56,189,248,.22);display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:800;color:var(--text);flex-shrink:0;transition:background .3s,border-color .3s}
+    .tl-card:hover .tl-initial{background:rgba(56,189,248,.12);border-color:rgba(56,189,248,.4)}
+    .tl-card-head-left{flex:1}
+    .tl-org-name{font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:2px;line-height:1.35;transition:color .25s}
+    .tl-card:hover .tl-org-name{color:var(--accent)}
+    .tl-location{font-size:.68rem;color:var(--muted);display:flex;align-items:center;gap:4px}
+    .tl-role-row{display:flex;align-items:center;gap:7px;margin-bottom:10px}
+    .tl-role-icon{font-size:.72rem;color:var(--muted)}.tl-role-text{font-size:.78rem;font-weight:700;color:var(--text)}
+    .tl-card ul{padding-left:0;display:flex;flex-direction:column;gap:7px;list-style:none}
+    .tl-card li{font-size:.77rem;color:var(--sub);line-height:1.6;display:flex;align-items:flex-start;gap:8px}
+    .tl-card li::before{content:'';width:5px;height:5px;background:var(--accent);border-radius:50%;margin-top:7px;flex-shrink:0;opacity:.7}
+
+    /* SKILLS */
+    .skills-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(115px,1fr));gap:14px}
+    .skill-item{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:22px 14px;text-align:center;position:relative;overflow:hidden;transition:transform .35s cubic-bezier(.23,1,.32,1),border-color .3s,box-shadow .3s}
+    .skill-item::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(56,189,248,.08),transparent 70%);opacity:0;transition:opacity .3s}
+    .skill-item:hover{transform:translateY(-8px) scale(1.04);border-color:var(--accent);box-shadow:0 16px 40px rgba(56,189,248,.15)}
+    .skill-item:hover::before{opacity:1}
+    .skill-item img{width:44px;height:44px;margin-bottom:10px;transition:transform .4s cubic-bezier(.34,1.56,.64,1),filter .3s}
+    .skill-item:hover img{transform:scale(1.15) rotate(-5deg);filter:drop-shadow(0 4px 8px rgba(56,189,248,.4))}
+    .skill-item p{font-size:.76rem;color:var(--sub);font-weight:600;transition:color .25s}
+    .skill-item:hover p{color:var(--accent)}
+
+    /* PROJECTS */
+    .project-list{display:flex;flex-direction:column;gap:20px}
+    .project-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:28px 32px;display:grid;grid-template-columns:1fr auto;gap:14px 44px;align-items:start;position:relative;overflow:hidden;transition:transform .35s cubic-bezier(.23,1,.32,1),box-shadow .35s,border-color .3s}
+    .project-card::before{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));transform:scaleX(0);transform-origin:left;transition:transform .4s ease}
+    .project-card:hover{transform:translateY(-6px);box-shadow:0 24px 60px rgba(0,0,0,.45);border-color:rgba(56,189,248,.22)}
+    .project-card:hover::before{transform:scaleX(1)}
+    .proj-num{font-size:2.6rem;font-weight:800;color:rgba(56,189,248,.07);line-height:1;margin-bottom:5px;transition:color .3s}
+    .project-card:hover .proj-num{color:rgba(56,189,248,.13)}
+    .project-card h3{font-size:1.05rem;font-weight:700;margin-bottom:4px;transition:color .25s}
+    .project-card:hover h3{color:var(--accent)}
+    .proj-sub{font-size:.74rem;color:var(--muted);margin-bottom:11px}
+    .proj-role-badge{display:inline-block;padding:4px 11px;background:rgba(129,140,248,.1);border:1px solid rgba(129,140,248,.22);border-radius:100px;font-size:.7rem;color:var(--accent2);margin-bottom:13px;transition:background .25s,border-color .25s}
+    .project-card:hover .proj-role-badge{background:rgba(129,140,248,.18);border-color:rgba(129,140,248,.4)}
+    .proj-desc{font-size:.83rem;line-height:1.8;color:var(--sub);margin-bottom:16px}
+    .proj-tech{display:flex;gap:6px;flex-wrap:wrap}
+    .proj-tech span{padding:4px 10px;background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.15);border-radius:100px;font-size:.68rem;color:var(--accent);font-weight:600;transition:background .25s,transform .2s}
+    .proj-tech span:hover{background:rgba(56,189,248,.18);transform:scale(1.06)}
+    .proj-links{display:flex;flex-direction:column;gap:8px}
+    .proj-links a{display:inline-flex;align-items:center;gap:7px;padding:9px 15px;border:1px solid var(--border);border-radius:10px;color:var(--sub);text-decoration:none;font-size:.76rem;font-weight:600;white-space:nowrap;position:relative;overflow:hidden;transition:color .25s,border-color .25s,transform .25s,box-shadow .25s}
+    .proj-links a::before{content:'';position:absolute;inset:0;background:rgba(56,189,248,.06);transform:scaleX(0);transform-origin:left;transition:transform .3s ease}
+    .proj-links a:hover{border-color:var(--accent);color:var(--accent);transform:translateX(3px);box-shadow:0 4px 16px rgba(56,189,248,.1)}
+    .proj-links a:hover::before{transform:scaleX(1)}
+    .proj-links a i,.proj-links a span{position:relative;z-index:1}
+
+    /* ACHIEVEMENTS */
+    .ach-card{display:flex;align-items:center;gap:32px;background:linear-gradient(135deg,rgba(251,191,36,.06),rgba(251,191,36,.02));border:1px solid rgba(251,191,36,.22);border-radius:20px;padding:36px 40px;position:relative;overflow:hidden;transition:transform .35s,box-shadow .35s,border-color .3s}
+    .ach-card::before{content:'';position:absolute;top:-60%;left:-60%;width:40%;height:200%;background:linear-gradient(105deg,transparent 40%,rgba(251,191,36,.05) 50%,transparent 60%);transform:rotate(20deg);transition:left .7s ease}
+    .ach-card:hover{transform:translateY(-6px);box-shadow:0 24px 60px rgba(251,191,36,.12);border-color:rgba(251,191,36,.4)}
+    .ach-card:hover::before{left:140%}
+    .ach-icon{font-size:2.8rem;flex-shrink:0;transition:transform .4s cubic-bezier(.34,1.56,.64,1)}
+    .ach-card:hover .ach-icon{transform:scale(1.2) rotate(-8deg)}
+    .ach-body h3{font-size:1.1rem;font-weight:800;color:var(--gold);margin-bottom:7px}
+    .ach-body p{font-size:.85rem;color:var(--text);margin-bottom:5px;line-height:1.6}
+    .ach-body span{font-size:.78rem;color:var(--muted)}
+    .ach-year{margin-left:auto;font-size:4rem;font-weight:800;color:rgba(251,191,36,.1);line-height:1;flex-shrink:0;transition:color .3s}
+    .ach-card:hover .ach-year{color:rgba(251,191,36,.18)}
+
+    /* ACADEMIC DOCS */
+    .doc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}
+    .doc-card{background:var(--surface2);border:1px solid var(--border);border-radius:20px;overflow:hidden;position:relative;transition:transform .4s cubic-bezier(.23,1,.32,1),box-shadow .4s,border-color .3s}
+    .doc-card:hover{transform:translateY(-8px);box-shadow:0 28px 64px rgba(56,189,248,.15);border-color:rgba(56,189,248,.3)}
+    .doc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));transform:scaleX(0);transform-origin:left;transition:transform .4s ease}
+    .doc-card:hover::before{transform:scaleX(1)}
+    .doc-preview{height:180px;background:linear-gradient(135deg,#0a1525,#142035,#0d1b30);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+    .doc-preview .grid-lines{position:absolute;inset:0;background-image:linear-gradient(rgba(56,189,248,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(56,189,248,.03) 1px,transparent 1px);background-size:20px 20px}
+    .doc-preview-glow{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(56,189,248,.08) 0%,transparent 65%)}
+    .doc-icon-wrap{width:72px;height:72px;border-radius:20px;background:rgba(56,189,248,.08);border:1.5px solid rgba(56,189,248,.2);display:flex;align-items:center;justify-content:center;font-size:2rem;position:relative;z-index:1;transition:transform .4s cubic-bezier(.34,1.56,.64,1),background .3s,box-shadow .3s}
+    .doc-card:hover .doc-icon-wrap{transform:scale(1.1) rotate(-3deg);background:rgba(56,189,248,.15);box-shadow:0 12px 36px rgba(56,189,248,.25)}
+    .doc-watermark{position:absolute;bottom:10px;right:12px;font-size:.6rem;font-weight:700;letter-spacing:.12em;color:rgba(56,189,248,.18);text-transform:uppercase;z-index:1}
+    .doc-body{padding:20px 22px 22px}
+    .doc-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.15);border-radius:100px;font-size:.62rem;font-weight:700;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;margin-bottom:10px}
+    .doc-title{font-size:1rem;font-weight:800;color:var(--text);margin-bottom:5px;line-height:1.3;transition:color .25s}
+    .doc-card:hover .doc-title{color:var(--accent)}
+    .doc-sub{font-size:.75rem;color:var(--muted);margin-bottom:16px;line-height:1.5}
+    .doc-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+    .doc-meta-item{display:flex;align-items:center;gap:5px;font-size:.7rem;color:var(--sub)}
+    .doc-meta-item i{font-size:.65rem;color:var(--accent);opacity:.7}
+    .doc-download-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px 16px;background:linear-gradient(135deg,rgba(56,189,248,.1),rgba(129,140,248,.1));border:1px solid rgba(56,189,248,.2);border-radius:12px;font-size:.78rem;font-weight:700;color:var(--accent);text-decoration:none;transition:background .3s,border-color .3s,transform .25s,box-shadow .3s}
+    .doc-download-btn:hover{background:linear-gradient(135deg,rgba(56,189,248,.2),rgba(129,140,248,.15));border-color:rgba(56,189,248,.4);transform:translateY(-2px);box-shadow:0 8px 28px rgba(56,189,248,.15)}
+    .doc-download-btn i{font-size:.8rem;transition:transform .3s}
+    .doc-download-btn:hover i{transform:translateY(2px)}
+
+    /* FOOTER */
+    .site-footer{position:relative;background:var(--bg);border-top:1px solid var(--border);overflow:hidden}
+    .site-footer::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:700px;height:280px;background:radial-gradient(ellipse,rgba(56,189,248,.06) 0%,rgba(129,140,248,.04) 40%,transparent 70%);pointer-events:none}
+    .footer-body{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:48px;padding:52px 7% 44px;position:relative;z-index:1;border-bottom:1px solid var(--border)}
+    .footer-brand-name{font-size:1.05rem;font-weight:800;color:var(--accent);margin-bottom:4px}
+    .footer-brand-role{font-size:.72rem;color:var(--muted);margin-bottom:14px;letter-spacing:.04em}
+    .footer-brand-desc{font-size:.79rem;color:var(--sub);line-height:1.8;max-width:260px;margin-bottom:20px}
+    .footer-social-row{display:flex;gap:9px}
+    .footer-social-btn{width:38px;height:38px;display:flex;align-items:center;justify-content:center;border:1.5px solid rgba(255,255,255,.08);border-radius:10px;color:var(--muted);font-size:.9rem;text-decoration:none;transition:color .3s,border-color .3s,transform .3s,background .3s,box-shadow .3s}
+    .footer-social-btn:hover{transform:translateY(-4px)}
+    .fsb-gh:hover{border-color:#e2e8f0;color:#e2e8f0;background:rgba(255,255,255,.05);box-shadow:0 6px 18px rgba(255,255,255,.08)}
+    .fsb-li:hover{border-color:#0a66c2;color:#0a66c2;background:rgba(10,102,194,.07);box-shadow:0 6px 18px rgba(10,102,194,.2)}
+    .fsb-em:hover{border-color:#ea4335;color:#ea4335;background:rgba(234,67,53,.06);box-shadow:0 6px 18px rgba(234,67,53,.2)}
+    .fsb-wa:hover{border-color:#25d366;color:#25d366;background:rgba(37,211,102,.06);box-shadow:0 6px 18px rgba(37,211,102,.2)}
+    .footer-col-title{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text);margin-bottom:16px;padding-bottom:9px;border-bottom:1px solid var(--border)}
+    .footer-links{display:flex;flex-direction:column;gap:9px}
+    .footer-links a{font-size:.79rem;color:var(--sub);text-decoration:none;display:flex;align-items:center;gap:7px;transition:color .25s,transform .2s}
+    .footer-links a i{font-size:.62rem;color:var(--accent);opacity:.6;transition:opacity .25s}
+    .footer-links a:hover{color:var(--accent);transform:translateX(4px)}
+    .footer-links a:hover i{opacity:1}
+    .footer-contact-item{display:flex;align-items:center;gap:10px;font-size:.79rem;color:var(--sub);margin-bottom:10px;transition:color .25s}
+    .footer-contact-item:last-child{margin-bottom:0}
+    .footer-contact-item .fc-icon{width:28px;height:28px;border-radius:7px;background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.15);display:flex;align-items:center;justify-content:center;font-size:.65rem;color:var(--accent);flex-shrink:0}
+    .footer-contact-item a{color:var(--sub);text-decoration:none;transition:color .25s}
+    .footer-contact-item:hover,.footer-contact-item:hover a{color:var(--accent)}
+    .footer-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;padding:18px 7%;position:relative;z-index:1}
+    .footer-bottom p{font-size:.72rem;color:var(--muted)}
+    .footer-bottom-right{display:flex;align-items:center;gap:8px;font-size:.72rem;color:var(--muted)}
+    .footer-heart{color:#ef4444;animation:blink 2s infinite}
+    .footer-stack-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.12);border-radius:100px;font-size:.65rem;color:var(--muted)}
+
+    /* CV EMBED SECTION */
+    .cv-section-inner { max-width: 960px; margin: 0 auto; }
+
+    /* floating glow orbs behind the card */
+    .cv-glow-wrap { position: relative; }
+    .cv-glow-wrap::before {
+      content: ''; position: absolute; top: -80px; left: -100px;
+      width: 340px; height: 340px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(56,189,248,.09) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+    .cv-glow-wrap::after {
+      content: ''; position: absolute; bottom: -60px; right: -80px;
+      width: 280px; height: 280px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(129,140,248,.07) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+
+    .cv-embed-card {
+      position: relative; z-index: 1;
+      background: linear-gradient(145deg, #0d1628, #111c30);
+      border: 1px solid rgba(56,189,248,.18);
+      border-radius: 28px; overflow: hidden;
+      box-shadow: 0 40px 100px rgba(0,0,0,.65), 0 0 0 1px rgba(56,189,248,.06);
+    }
+
+    /* animated top accent bar */
+    .cv-embed-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent));
+      background-size: 200%;
+      animation: grad-shift 4s ease infinite;
+      z-index: 2;
+    }
+
+    /* header bar */
+    .cv-embed-header {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding: 20px 28px;
+      background: rgba(5,10,22,.65);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(56,189,248,.1);
+    }
+    .cv-embed-header-left { display: flex; align-items: center; gap: 14px; }
+
+    /* pdf icon */
+    .cv-embed-icon {
+      width: 46px; height: 46px; border-radius: 14px;
+      background: rgba(56,189,248,.1); border: 1.5px solid rgba(56,189,248,.28);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; color: var(--accent); flex-shrink: 0;
+      box-shadow: 0 0 18px rgba(56,189,248,.15);
+      transition: transform .3s, box-shadow .3s;
+    }
+    .cv-embed-card:hover .cv-embed-icon {
+      transform: rotate(-6deg) scale(1.08);
+      box-shadow: 0 0 28px rgba(56,189,248,.3);
+    }
+
+    .cv-embed-title { font-size: .92rem; font-weight: 800; color: var(--text); line-height: 1.2; }
+    .cv-embed-sub { font-size: .68rem; color: var(--muted); margin-top: 3px; letter-spacing: .03em; }
+
+    /* meta pills */
+    .cv-embed-meta { display: flex; gap: 8px; margin-top: 7px; flex-wrap: wrap; }
+    .cv-meta-pill {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 10px;
+      background: rgba(56,189,248,.07); border: 1px solid rgba(56,189,248,.15);
+      border-radius: 100px; font-size: .62rem; font-weight: 600; color: var(--sub);
+    }
+    .cv-meta-pill i { font-size: .58rem; color: var(--accent); opacity: .8; }
+    .cv-meta-pill.pill-green { background: rgba(16,185,129,.07); border-color: rgba(16,185,129,.2); color: #10b981; }
+    .cv-meta-pill.pill-green i { color: #10b981; }
+
+    /* icon-only download button in CV card */
+    .btn-cv-icon {
+      width: 46px; height: 46px; border-radius: 14px;
+      background: rgba(56,189,248,.1);
+      border: 1.5px solid rgba(56,189,248,.3);
+      color: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; flex-shrink: 0;
+      text-decoration: none;
+      transition: transform .3s, background .3s, box-shadow .3s, border-color .3s;
+      box-shadow: 0 0 14px rgba(56,189,248,.1);
+      position: relative; overflow: hidden;
+    }
+    .btn-cv-icon::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      opacity: 0; transition: opacity .3s;
+      border-radius: 12px;
+    }
+    .btn-cv-icon:hover { transform: translateY(-3px) scale(1.1); border-color: var(--accent); box-shadow: 0 10px 28px rgba(56,189,248,.35); }
+    .btn-cv-icon:hover::before { opacity: 1; }
+    .btn-cv-icon:hover i { color: var(--bg); }
+    .btn-cv-icon i { position: relative; z-index: 1; transition: color .3s; animation: bounce-down 1.6s ease-in-out infinite; }
+
+    /* browser chrome bar */
+    .cv-browser-bar {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 20px;
+      background: rgba(8,13,24,.8);
+      border-bottom: 1px solid rgba(255,255,255,.05);
+    }
+    .cv-browser-dots { display: flex; gap: 6px; }
+    .cv-browser-dots span { width: 10px; height: 10px; border-radius: 50%; }
+    .cv-browser-dots span:nth-child(1) { background: #ff5f57; }
+    .cv-browser-dots span:nth-child(2) { background: #febc2e; }
+    .cv-browser-dots span:nth-child(3) { background: #28c840; }
+    .cv-browser-url {
+      flex: 1; display: flex; align-items: center; gap: 7px;
+      padding: 5px 14px;
+      background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.07);
+      border-radius: 8px; font-size: .67rem; color: var(--muted);
+      font-family: 'Courier New', monospace;
+    }
+    .cv-browser-url i { font-size: .6rem; color: #10b981; }
+
+    /* iframe */
+    .cv-embed-body { background: #f0f0f0; position: relative; }
+    .cv-embed-body iframe { width: 100%; height: 400px; border: none; display: block; }
+
+    /* bottom bar */
+    .cv-embed-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 28px; gap: 12px;
+      background: rgba(5,10,22,.7);
+      border-top: 1px solid rgba(56,189,248,.08);
+    }
+    .cv-embed-footer-info { display: flex; align-items: center; gap: 6px; font-size: .67rem; color: var(--muted); }
+    .cv-embed-footer-info i { font-size: .58rem; color: var(--accent); opacity: .7; }
+    .cv-verified {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 10px;
+      background: rgba(16,185,129,.08); border: 1px solid rgba(16,185,129,.22);
+      border-radius: 100px; font-size: .62rem; font-weight: 700; color: #10b981;
+    }
+    .cv-verified::before { content: ''; width: 5px; height: 5px; background: #10b981; border-radius: 50%; animation: blink 2s infinite; }
+
+    @media(max-width:768px){
+      .cv-embed-header { flex-direction: column; align-items: flex-start; }
+      .cv-embed-body iframe { height: 300px; }
+      .cv-browser-url { display: none; }
+    }
+    @media(max-width:480px){ .cv-embed-body iframe { height: 260px; } }
+
+    /* REVEAL */
+    .reveal{opacity:0;transform:translateY(24px);transition:opacity .55s ease,transform .55s ease}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+
+    /* RESPONSIVE */
+    @media(max-width:960px){
+      .hero-inner{flex-direction:column-reverse;gap:36px;text-align:center}
+      .hero-socials{justify-content:center}
+      .hero-desc{margin-left:auto;margin-right:auto}
+      .hero-illus-wrap{width:300px;height:300px}
+      .illus-screen{width:160px}
+      .about-grid{grid-template-columns:1fr}
+      .about-img-wrap{max-width:200px;margin:auto}
+      .about-chips,.cv-btn-group{justify-content:center}
+      .project-card{grid-template-columns:1fr}
+      .ach-card{flex-direction:column;text-align:center}
+      .ach-year{margin:0 auto}
+      .footer-body{grid-template-columns:1fr 1fr}
+      .timeline-wrap::before{left:18px}
+      .tl-item{grid-template-columns:44px 1fr;grid-template-rows:auto auto;gap:0 12px}
+      .tl-item.left .tl-card,.tl-item.right .tl-card{grid-column:2;grid-row:1}
+      .tl-item.left .tl-mid,.tl-item.right .tl-mid{grid-column:1;grid-row:1;padding-top:22px;align-items:center}
+      .tl-date-badge{font-size:0;width:0;padding:0;border:none;overflow:hidden}
+      .tl-dot{margin-top:4px}
+    }
+    @media(max-width:640px){
+      .nav-links{display:none}
+      .section{padding:60px 5%}
+      .hero{padding:60px 5% 48px}
+      .navbar{padding:0 5%}
+      .hero-illus-wrap{width:260px;height:260px}
+      .illus-screen{width:140px}
+      .ach-year{font-size:2.5rem}
+      #cursor-dot,#cursor-ring{display:none}
+      body{cursor:auto}
+      a,button{cursor:pointer}
+      .footer-body{grid-template-columns:1fr;gap:32px}
+      .cv-modal{border-radius:16px}
+      .btn-nav-cv span{display:none}
+      .btn-nav-cv{padding:9px 14px}
+    }
+  </style>
+</head>
+<body>
+
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="#home" class="logo">Riska Ayu K.</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#organization">Organization</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#achievements">Achievements</a></li>
+    <li><a href="#academic">Academic</a></li>
+    <li><a href="#cv">CV</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="assets/CV Riska Ayu Kusumaningrum.pdf"
+     download="CV Riska Ayu Kusumaningrum.pdf"
+     class="btn-nav-cv">
+    <i class="fas fa-download"></i>
+    <span>Download CV</span>
+  </a>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="home">
+  <div class="hero-glow hero-glow-1"></div>
+  <div class="hero-glow hero-glow-2"></div>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-badge"><span class="hero-badge-dot"></span>Open to Opportunities</div>
+      <h1 class="hero-name">Riska Ayu<br><span class="hl">Kusumaningrum</span></h1>
+      <p class="hero-role">Frontend Developer</p>
+      <p class="hero-desc">Membangun web interaktif yang fungsional dan menarik menggunakan React JS, HTML, dan CSS. Terbiasa bekerja dalam tim dan mengelola proyek untuk menghasilkan solusi yang optimal.</p>
+      <div class="hero-socials">
+        <a href="https://github.com/riskayuu" target="_blank" class="social-btn s-gh"><i class="fab fa-github"></i></a>
+        <a href="https://linkedin.com/in/riska-ayu-k" target="_blank" class="social-btn s-li"><i class="fab fa-linkedin-in"></i></a>
+        <a href="/cdn-cgi/l/email-protection#67150e140c06515150505f27000a060e0b4904080a" class="social-btn s-em"><i class="fas fa-envelope"></i></a>
+        <a href="https://wa.me/6282138007173" target="_blank" class="social-btn s-wa"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-illus-wrap">
+        <div class="illus-orbit"></div>
+        <div class="illus-orbit-2"></div>
+        <div class="illus-float illus-gear-big"><i class="fas fa-cog"></i></div>
+        <div class="illus-float illus-gear-sm"><i class="fas fa-cog"></i></div>
+        <div class="illus-float illus-cloud"><i class="fas fa-cloud-upload-alt"></i></div>
+        <div class="illus-float illus-tag">&lt;/&gt;</div>
+        <div class="illus-float illus-mobile"></div>
+        <div class="illus-float illus-check"><i class="fas fa-check"></i></div>
+        <div class="illus-monitor">
+          <div class="illus-screen">
+            <div class="illus-dots"><span></span><span></span><span></span></div>
+            <div class="illus-code">
+              <div class="code-line cl-1"></div><div class="code-line cl-2"></div>
+              <div class="code-line cl-3"></div><div class="code-line cl-4"></div>
+              <div class="code-line cl-5"></div><div class="code-line cl-6"></div>
+              <div class="code-line cl-7"></div>
+            </div>
+          </div>
+          <div class="illus-stand"></div>
+          <div class="illus-base"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <p class="sec-eyebrow">Who I Am</p>
+  <h2 class="sec-title">About Me</h2>
+  <div class="about-grid">
+    <div class="about-img-wrap reveal">
+      <img src="assets/profile-riska.png" alt="Riska Ayu">
+    </div>
+    <div class="about-text reveal">
+      <p>Saya adalah mahasiswa aktif Sistem Informasi semester 6 di <strong>Universitas Ahmad Dahlan</strong> dengan fokus minat pada Frontend Development. Saya memiliki pengalaman membangun antarmuka web interaktif menggunakan React JS, HTML, dan CSS, serta merancang UI/UX menggunakan Figma untuk menciptakan tampilan yang intuitif, menarik, dan fungsional.</p>
+      <p>Saya juga aktif dalam berbagai kegiatan organisasi dan kepanitiaan yang mengasah kemampuan komunikasi, kolaborasi tim, dan manajemen waktu. Pribadi yang adaptif, bertanggung jawab, dan berkomitmen untuk terus belajar dan berkembang sebagai Frontend Developer profesional.</p>
+      <div class="about-chips">
+        <div class="about-chip ac-html">
+          <div class="ac-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg"></div>
+          <div class="ac-text"><strong>HTML</strong><span>Structure</span></div>
+        </div>
+        <div class="about-chip ac-css">
+          <div class="ac-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg"></div>
+          <div class="ac-text"><strong>CSS</strong><span>Styling</span></div>
+        </div>
+        <div class="about-chip ac-react">
+          <div class="ac-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg"></div>
+          <div class="ac-text"><strong>React JS</strong><span>Frontend</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ORGANIZATION -->
+<section class="section section-alt" id="organization">
+  <p class="sec-eyebrow">Leadership &amp; Teamwork</p>
+  <h2 class="sec-title">Organizational Experience</h2>
+  <div class="timeline-wrap">
+    <div class="tl-item left reveal">
+      <div class="tl-card"><div class="shimmer"></div>
+        <div class="tl-date-badge"><i class="fas fa-calendar-alt"></i>&nbsp;Jun 2024 – Des 2024</div>
+        <div class="tl-card-head">
+          <div class="tl-card-head-left"><p class="tl-org-name">Himpunan Mahasiswa Sistem Informasi</p><p class="tl-location"><i class="fas fa-map-marker-alt"></i> Universitas Ahmad Dahlan, Yogyakarta</p></div>
+          <div class="tl-initial">H</div>
+        </div>
+        <div class="tl-role-row"><i class="fas fa-briefcase tl-role-icon"></i><span class="tl-role-text">Sekretaris &amp; Bendahara Divisi PBSDM</span></div>
+        <ul>
+          <li>Mengelola administrasi dan keuangan divisi beranggotakan 7 orang, termasuk penyusunan proposal, laporan pertanggungjawaban (LPJ), notulensi rapat, dokumentasi kegiatan, serta pengelolaan kas secara tertib dan transparan.</li>
+          <li>Mengoptimalkan pengarsipan dokumen secara sistematis sehingga mempermudah proses evaluasi program kerja.</li>
+          <li>Berkoordinasi aktif dengan anggota divisi dalam perencanaan dan pelaksanaan program kerja, serta melakukan monitoring timeline agar seluruh kegiatan terlaksana sesuai target dan perencanaan.</li>
+        </ul>
+      </div>
+      <div class="tl-mid"><div class="tl-dot"></div></div>
+    </div>
+    <div class="tl-item right reveal">
+      <div class="tl-card"><div class="shimmer"></div>
+        <div class="tl-date-badge"><i class="fas fa-calendar-alt"></i>&nbsp;Agu 2024 – Sep 2024</div>
+        <div class="tl-card-head">
+          <div class="tl-card-head-left"><p class="tl-org-name">Program Pengenalan Kampus (P2K) FAST</p><p class="tl-location"><i class="fas fa-map-marker-alt"></i> Universitas Ahmad Dahlan, Yogyakarta</p></div>
+          <div class="tl-initial">P</div>
+        </div>
+        <div class="tl-role-row"><i class="fas fa-briefcase tl-role-icon"></i><span class="tl-role-text">Sie Kreatif</span></div>
+        <ul>
+          <li>Merancang dan mengembangkan konsep kreatif kegiatan, termasuk materi penampilan dan aktivitas interaktif, untuk meningkatkan keterlibatan dan antusiasme mahasiswa baru selama rangkaian acara.</li>
+          <li>Berkontribusi dalam perancangan konsep atribut peserta serta koordinasi dengan divisi terkait agar seluruh elemen kegiatan selaras dengan tema acara.</li>
+        </ul>
+      </div>
+      <div class="tl-mid"><div class="tl-dot"></div></div>
+    </div>
+    <div class="tl-item left reveal">
+      <div class="tl-card"><div class="shimmer"></div>
+        <div class="tl-date-badge"><i class="fas fa-calendar-alt"></i>&nbsp;Sep 2024 – Okt 2024</div>
+        <div class="tl-card-head">
+          <div class="tl-card-head-left"><p class="tl-org-name">Reincarnation of Soul and Power of Creative (RESPECT XIV)</p><p class="tl-location"><i class="fas fa-map-marker-alt"></i> Universitas Ahmad Dahlan, Yogyakarta</p></div>
+          <div class="tl-initial">R</div>
+        </div>
+        <div class="tl-role-row"><i class="fas fa-briefcase tl-role-icon"></i><span class="tl-role-text">Sekretaris Umum</span></div>
+        <ul>
+          <li>Mengelola administrasi kegiatan melalui penyusunan proposal, surat perizinan, dan undangan, pencatatan notulensi rapat, serta pengarsipan dokumen secara terstruktur.</li>
+          <li>Menginisiasi penyusunan timeline dan pengaturan jadwal rapat sehingga koordinasi panitia lebih terstruktur dan efektif.</li>
+          <li>Mengoordinasikan komunikasi antar divisi untuk memastikan kelancaran seluruh rangkaian kegiatan.</li>
+        </ul>
+      </div>
+      <div class="tl-mid"><div class="tl-dot"></div></div>
+    </div>
+    <div class="tl-item right reveal">
+      <div class="tl-card"><div class="shimmer"></div>
+        <div class="tl-date-badge"><i class="fas fa-calendar-alt"></i>&nbsp;Mei 2025 – Des 2025</div>
+        <div class="tl-card-head">
+          <div class="tl-card-head-left"><p class="tl-org-name">Himpunan Mahasiswa Sistem Informasi</p><p class="tl-location"><i class="fas fa-map-marker-alt"></i> Universitas Ahmad Dahlan, Yogyakarta</p></div>
+          <div class="tl-initial">H</div>
+        </div>
+        <div class="tl-role-row"><i class="fas fa-briefcase tl-role-icon"></i><span class="tl-role-text">Sekretaris Anggota 1</span></div>
+        <ul>
+          <li>Meninjau dan memverifikasi proposal kegiatan dari setiap divisi guna memastikan kelengkapan, kerapian, dan kesesuaian dokumen dengan standar administrasi organisasi.</li>
+          <li>Berkontribusi dalam meningkatkan ketertiban administrasi melalui pembimbingan sekretaris divisi dan monitoring pelaksanaan program kerja Divisi PBSDM.</li>
+        </ul>
+      </div>
+      <div class="tl-mid"><div class="tl-dot"></div></div>
+    </div>
+    <div class="tl-item left reveal">
+      <div class="tl-card"><div class="shimmer"></div>
+        <div class="tl-date-badge"><i class="fas fa-calendar-alt"></i>&nbsp;Jan 2026 – Feb 2026</div>
+        <div class="tl-card-head">
+          <div class="tl-card-head-left"><p class="tl-org-name">Creative Innovation and Science Technology Festival (CREATE-IN 5.0)</p><p class="tl-location"><i class="fas fa-map-marker-alt"></i> Universitas Ahmad Dahlan, Yogyakarta</p></div>
+          <div class="tl-initial">C</div>
+        </div>
+        <div class="tl-role-row"><i class="fas fa-briefcase tl-role-icon"></i><span class="tl-role-text">Sie Acara</span></div>
+        <ul>
+          <li>Menyusun konsep dan alur kegiatan melalui pembuatan guidebook serta rundown acara sebagai acuan teknis pelaksanaan kegiatan.</li>
+          <li>Mengoordinasikan teknis perlombaan bersama dewan juri dan tim pelaksana untuk memastikan kesiapan dan kelancaran pelaksanaan kegiatan.</li>
+        </ul>
+      </div>
+      <div class="tl-mid"><div class="tl-dot"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section class="section" id="skills">
+  <p class="sec-eyebrow">What I Use</p>
+  <h2 class="sec-title">Skills &amp; Tools</h2>
+  <div class="skills-grid">
+    <div class="skill-item reveal"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML"><p>HTML</p></div>
+    <div class="skill-item reveal"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS"><p>CSS</p></div>
+    <div class="skill-item reveal"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript"><p>JavaScript</p></div>
+    <div class="skill-item reveal"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React JS"><p>React JS</p></div>
+    <div class="skill-item reveal"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" alt="Figma"><p>Figma</p></div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="section section-alt" id="projects">
+  <p class="sec-eyebrow">What I've Built</p>
+  <h2 class="sec-title">Project Experience</h2>
+  <div class="project-list">
+    <div class="project-card reveal">
+      <div class="proj-main">
+        <div class="proj-num">01</div>
+        <h3>UKM Music Management</h3>
+        <p class="proj-sub">Universitas Ahmad Dahlan · Teknologi Web</p>
+        <span class="proj-role-badge">Frontend Developer</span>
+        <p class="proj-desc">Mengembangkan antarmuka sistem manajemen UKM Seni Musik UAD berbasis web untuk mendukung digitalisasi proses pendaftaran anggota, pengelolaan data anggota, serta penyampaian informasi agenda kegiatan. Sistem ini membantu pengurus dalam mengelola administrasi secara lebih terstruktur serta mempermudah anggota dan mahasiswa dalam mengakses informasi UKM.</p>
+        <div class="proj-tech"><span>HTML</span><span>CSS</span><span>JavaScript</span><span>React JS</span></div>
+      </div>
+      <div class="proj-links">
+        <a href="https://github.com/riskayuu/ukm-music-management.git" target="_blank"><i class="fab fa-github"></i><span>GitHub</span></a>
+      </div>
+    </div>
+    <div class="project-card reveal">
+      <div class="proj-main">
+        <div class="proj-num">02</div>
+        <h3>Chefio</h3>
+        <p class="proj-sub">Universitas Ahmad Dahlan · Mobile App</p>
+        <span class="proj-role-badge">UI Designer &amp; Frontend Developer</span>
+        <p class="proj-desc">Mengembangkan aplikasi resep masakan berbasis mobile dalam tim beranggotakan 3 orang dengan fokus pada perancangan UI di Figma dan implementasi antarmuka menggunakan Flutter. Aplikasi terintegrasi dengan Supabase untuk pengelolaan data resep sehingga pengguna dapat menambahkan, menyimpan, dan mengelola resep secara terstruktur melalui fitur tambah resep, bookmark, dan dark mode. Mengatasi masalah catatan manual, screenshot yang mudah hilang, dan link yang sulit ditemukan.</p>
+        <div class="proj-tech"><span>Dart (Flutter)</span><span>HTML</span><span>Supabase</span><span>Figma</span></div>
+      </div>
+      <div class="proj-links">
+        <a href="https://figma.fun/jKqvnW" target="_blank"><i class="fab fa-figma"></i><span>UI Design</span></a>
+        <a href="https://github.com/riskayuu/chefio-project.git" target="_blank"><i class="fab fa-github"></i><span>GitHub</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section class="section" id="achievements">
+  <p class="sec-eyebrow">Recognition</p>
+  <h2 class="sec-title">Achievements</h2>
+  <div class="ach-card reveal">
+    <div class="ach-icon">🥈</div>
+    <div class="ach-body">
+      <h3>Juara 2 — Inovasi Produk</h3>
+      <p>Kompetisi dan Pameran Kewirausahaan Mahasiswa "Saudagar Dahlan Muda" #3 – Tingkat Nasional</p>
+      <span>Biro Kemahasiswaan dan Alumni, Universitas Ahmad Dahlan</span>
+    </div>
+    <div class="ach-year">2024</div>
+  </div>
+</section>
+
+<!-- ACADEMIC DOCUMENTS -->
+<section class="section" id="academic">
+  <p class="sec-eyebrow">Academic Records</p>
+  <h2 class="sec-title">Dokumen Akademik</h2>
+  <div class="doc-grid">
+    <div class="doc-card reveal">
+      <div class="doc-preview">
+        <div class="grid-lines"></div><div class="doc-preview-glow"></div>
+        <div class="doc-icon-wrap">📋</div>
+        <span class="doc-watermark">UAD · SI · 2026</span>
+      </div>
+      <div class="doc-body">
+        <span class="doc-badge"><i class="fas fa-calendar-check"></i> Semester 6</span>
+        <h3 class="doc-title">Kartu Rencana Studi</h3>
+        <p class="doc-sub">Riska Ayu Kusumaningrum · Sistem Informasi<br>Universitas Ahmad Dahlan — TA 2025/2026</p>
+        <div class="doc-meta">
+          <div class="doc-meta-item"><i class="fas fa-file-alt"></i> PDF Document</div>
+          <div class="doc-meta-item"><i class="fas fa-shield-alt"></i> Official</div>
+        </div>
+        <a href="assets/KRS SEMESTER 6_RISKA AYU KUSUMANINGRUM.pdf" target="_blank" class="doc-download-btn"><i class="fas fa-eye"></i> Lihat KRS Semester 6</a>
+      </div>
+    </div>
+    <div class="doc-card reveal">
+      <div class="doc-preview">
+        <div class="grid-lines"></div><div class="doc-preview-glow"></div>
+        <div class="doc-icon-wrap">📊</div>
+        <span class="doc-watermark">UAD · SI · 2026</span>
+      </div>
+      <div class="doc-body">
+        <span class="doc-badge"><i class="fas fa-graduation-cap"></i> Transkrip</span>
+        <h3 class="doc-title">Transkrip Nilai</h3>
+        <p class="doc-sub">Riska Ayu Kusumaningrum · Sistem Informasi<br>Universitas Ahmad Dahlan — Kumulatif</p>
+        <div class="doc-meta">
+          <div class="doc-meta-item"><i class="fas fa-file-alt"></i> PDF Document</div>
+          <div class="doc-meta-item"><i class="fas fa-shield-alt"></i> Official</div>
+        </div>
+        <a href="assets/TRANSKRIP NILAI_RISKA AYU KUSUMANINGRUM.pdf" target="_blank" class="doc-download-btn"><i class="fas fa-eye"></i> Lihat Transkrip Nilai</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CV SECTION -->
+<section class="section section-alt" id="cv">
+  <div class="cv-section-inner">
+    <div class="cv-glow-wrap reveal">
+      <div class="cv-embed-card">
+
+        <!-- Header bar -->
+        <div class="cv-embed-header">
+          <div class="cv-embed-header-left">
+            <div class="cv-embed-icon"><i class="fas fa-file-pdf"></i></div>
+            <div>
+              <p class="cv-embed-title">CV Riska Ayu Kusumaningrum</p>
+              <p class="cv-embed-sub">Frontend Developer &nbsp;·&nbsp; Universitas Ahmad Dahlan, Yogyakarta</p>
+              <div class="cv-embed-meta">
+                <span class="cv-meta-pill"><i class="fas fa-file-alt"></i> PDF Document</span>
+                <span class="cv-meta-pill"><i class="fas fa-calendar"></i> 2026</span>
+                <span class="cv-meta-pill pill-green"><i class="fas fa-check-circle"></i> Verified</span>
+              </div>
+            </div>
+          </div>
+          <a href="assets/CV Riska Ayu Kusumaningrum.pdf"
+             download="CV Riska Ayu Kusumaningrum.pdf"
+             class="btn-cv-icon"
+             title="Download CV">
+            <i class="fas fa-arrow-down"></i>
+          </a>
+        </div>
+
+        <!-- Browser chrome bar -->
+        <div class="cv-browser-bar">
+          <div class="cv-browser-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="cv-browser-url">
+            <i class="fas fa-lock"></i>
+            assets/CV Riska Ayu Kusumaningrum.pdf
+          </div>
+        </div>
+
+        <!-- PDF iframe -->
+        <div class="cv-embed-body">
+          <iframe src="assets/CV Riska Ayu Kusumaningrum.pdf" title="CV Riska Ayu Kusumaningrum"></iframe>
+        </div>
+
+        <!-- Footer bar -->
+        <div class="cv-embed-footer">
+          <div class="cv-embed-footer-info">
+            <i class="fas fa-info-circle"></i>
+            <span>Klik tombol Download CV untuk menyimpan ke perangkat</span>
+          </div>
+          <div class="cv-verified">Verified Document</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer" id="contact">
+  <div class="footer-body">
+    <div>
+      <p class="footer-brand-name">Riska Ayu Kusumaningrum</p>
+      <p class="footer-brand-role">Frontend Developer</p>
+      <p class="footer-brand-desc">Mahasiswa Sistem Informasi semester 6 di UAD yang bersemangat membangun antarmuka web fungsional dan interaktif.</p>
+      <div class="footer-social-row">
+        <a href="https://github.com/riskayuu" target="_blank" class="footer-social-btn fsb-gh"><i class="fab fa-github"></i></a>
+        <a href="https://linkedin.com/in/riska-ayu-k" target="_blank" class="footer-social-btn fsb-li"><i class="fab fa-linkedin-in"></i></a>
+        <a href="/cdn-cgi/l/email-protection#7a081309111b4c4c4d4d423a1d171b13165419151745090f18101f190e47321f1616155a281309111b" class="footer-social-btn fsb-em"><i class="fas fa-envelope"></i></a>
+        <a href="https://wa.me/6282138007173" target="_blank" class="footer-social-btn fsb-wa"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
+    <div>
+      <p class="footer-col-title">Navigasi</p>
+      <div class="footer-links">
+        <a href="#home"><i class="fas fa-chevron-right"></i> Home</a>
+        <a href="#about"><i class="fas fa-chevron-right"></i> About</a>
+        <a href="#organization"><i class="fas fa-chevron-right"></i> Organization</a>
+        <a href="#skills"><i class="fas fa-chevron-right"></i> Skills</a>
+        <a href="#projects"><i class="fas fa-chevron-right"></i> Projects</a>
+        <a href="#achievements"><i class="fas fa-chevron-right"></i> Achievements</a>
+        <a href="#academic"><i class="fas fa-chevron-right"></i> Academic Documents</a>
+        <a href="#cv"><i class="fas fa-chevron-right"></i> CV</a>
+      </div>
+    </div>
+    <div>
+      <p class="footer-col-title">Kontak</p>
+      <div class="footer-contact-item"><span class="fc-icon"><i class="fas fa-envelope"></i></span><a href="/cdn-cgi/l/email-protection#6f1d061c040e59595858572f08020e0603410c0002"><span class="__cf_email__" data-cfemail="483a213b23297e7e7f7f70082f25292124662b2725">[email&#160;protected]</span></a></div>
+      <div class="footer-contact-item"><span class="fc-icon"><i class="fab fa-whatsapp"></i></span><a href="https://wa.me/6282138007173" target="_blank">0821-3800-7173</a></div>
+      <div class="footer-contact-item"><span class="fc-icon"><i class="fab fa-linkedin-in"></i></span><a href="https://linkedin.com/in/riska-ayu-k" target="_blank">riska-ayu-k</a></div>
+      <div class="footer-contact-item"><span class="fc-icon"><i class="fab fa-github"></i></span><a href="https://github.com/riskayuu" target="_blank">riskayuu</a></div>
+      <div class="footer-contact-item"><span class="fc-icon"><i class="fas fa-map-marker-alt"></i></span><span>Yogyakarta, Indonesia</span></div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Riska Ayu Kusumaningrum · All rights reserved.</p>
+    <div class="footer-bottom-right">
+      Made with <span class="footer-heart">♥</span>
+      <span class="footer-stack-badge">
+        <i class="fab fa-html5" style="color:#e34f26"></i>&nbsp;HTML &nbsp;·&nbsp;
+        <i class="fab fa-css3-alt" style="color:#264de4"></i>&nbsp;CSS
+      </span>
+    </div>
+  </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  /* Custom Cursor */
+  const dot = document.getElementById('cursor-dot');
+  const ring = document.getElementById('cursor-ring');
+  let mouseX=0,mouseY=0,ringX=0,ringY=0;
+  document.addEventListener('mousemove',e=>{
+    mouseX=e.clientX;mouseY=e.clientY;
+    dot.style.left=mouseX+'px';dot.style.top=mouseY+'px';
+  });
+  (function animateRing(){
+    ringX+=(mouseX-ringX)*.45;ringY+=(mouseY-ringY)*.45;
+    ring.style.left=ringX+'px';ring.style.top=ringY+'px';
+    requestAnimationFrame(animateRing);
+  })();
+  document.querySelectorAll('a,button,.tl-card,.skill-item,.project-card,.doc-card,.ach-card,.about-chip,.footer-social-btn,.footer-contact-item,.footer-links a').forEach(el=>{
+    el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));
+  });
+  document.addEventListener('mousedown',()=>document.body.classList.add('cursor-click'));
+  document.addEventListener('mouseup',()=>document.body.classList.remove('cursor-click'));
+
+  /* Active nav */
+  const navLinks=document.querySelectorAll('.nav-links a');
+  const allSections=document.querySelectorAll('section[id],header[id]');
+  function activateLink(){
+    let current='';
+    allSections.forEach(s=>{if(window.scrollY>=s.offsetTop-90)current=s.id});
+    navLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+current));
+  }
+  window.addEventListener('scroll',activateLink,{passive:true});
+  activateLink();
+
+  /* Scroll reveal */
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);}});
+  },{threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  /* Force download CV — selalu unduh, tidak pernah buka di tab baru */
+  function forceDownloadCV(url, filename) {
+    fetch(url, { cache: 'no-store' })
+      .then(res => {
+        if (!res.ok) throw new Error('network');
+        return res.arrayBuffer();           // ambil raw bytes
+      })
+      .then(buffer => {
+        // MIME = application/octet-stream → browser WAJIB download, tidak bisa preview
+        const blobUrl = URL.createObjectURL(
+          new Blob([buffer], { type: 'application/octet-stream' })
+        );
+        const a = document.createElement('a');
+        a.style.cssText = 'position:fixed;top:-999px;left:-999px';
+        a.href = blobUrl;
+        a.download = filename;             // nama file saat tersimpan di laptop
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          document.body.removeChild(a);
+          URL.revokeObjectURL(blobUrl);
+        }, 5000);
+      })
+      .catch(() => {
+        // Fallback saat fetch gagal (misal file:// lokal) — tetap force download
+        const a = document.createElement('a');
+        a.style.cssText = 'position:fixed;top:-999px;left:-999px';
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => document.body.removeChild(a), 2000);
+      });
+  }
+
+  /* Attach ke semua tombol CV download */
+  document.querySelectorAll('.btn-nav-cv, .btn-cv-icon').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      const href = this.getAttribute('href');
+      const dl = this.getAttribute('download') || 'CV Riska Ayu Kusumaningrum.pdf';
+      forceDownloadCV(href, dl);
+    });
+  });
+
+</script>
+</body>
+</html>
