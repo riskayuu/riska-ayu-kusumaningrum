@@ -821,6 +821,77 @@
       .btn-nav-cv span{display:none}
       .btn-nav-cv{padding:9px 14px}
     }
+
+    /* ===== ACTIVITY GALLERY ===== */
+.gal-tabs-wrap{margin-bottom:28px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.gal-tabs-wrap::-webkit-scrollbar{display:none}
+.gal-tabs{display:flex;gap:8px;width:max-content;padding-bottom:2px}
+.gal-tab{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;background:var(--surface2);border:1px solid var(--border);border-radius:100px;color:var(--sub);font-family:inherit;font-size:.8rem;font-weight:600;cursor:none;white-space:nowrap;position:relative;overflow:hidden;transition:color .25s,border-color .25s,background .25s,transform .2s,box-shadow .25s}
+.gal-tab::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,.04);transform:scaleX(0);transform-origin:left;transition:transform .3s ease}
+.gal-tab:hover{color:var(--text);transform:translateY(-2px)}
+.gal-tab:hover::before{transform:scaleX(1)}
+.gal-tab.active{background:rgba(56,189,248,.1);border-color:rgba(56,189,248,.4);color:var(--text);box-shadow:0 4px 18px rgba(56,189,248,.12)}
+.gal-tab-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;transition:transform .25s}
+.gal-tab.active .gal-tab-dot{transform:scale(1.3)}
+.gal-tab-count{font-size:.68rem;padding:1px 7px;background:rgba(255,255,255,.07);border-radius:100px;color:var(--muted);transition:background .25s,color .25s}
+.gal-tab.active .gal-tab-count{background:rgba(56,189,248,.15);color:var(--accent)}
+
+.gal-panels{position:relative}
+.gal-panel{display:none;animation:gal-fadein .4s ease}
+.gal-panel.active{display:block}
+@keyframes gal-fadein{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+.gal-panel-meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.gal-panel-badge{display:inline-flex;align-items:center;gap:7px;padding:5px 14px;border:1px solid;border-radius:100px;font-size:.74rem;font-weight:600;color:var(--c,var(--accent));border-color:color-mix(in srgb,var(--c,var(--accent)) 35%,transparent);background:color-mix(in srgb,var(--c,var(--accent)) 8%,transparent)}
+.gal-panel-badge i{font-size:.68rem;opacity:.8}
+.gal-panel-period{display:inline-flex;align-items:center;gap:6px;font-size:.74rem;color:var(--muted)}
+.gal-panel-period i{font-size:.65rem;color:var(--accent);opacity:.6}
+
+.gal-grid{display:grid;gap:10px}
+.gal-grid-6{grid-template-columns:repeat(4,1fr)}
+.gal-grid-7{grid-template-columns:repeat(4,1fr)}
+.gal-grid-5{grid-template-columns:repeat(3,1fr)}
+
+.gal-img-wrap{position:relative;border-radius:14px;overflow:hidden;cursor:none;background:var(--surface2);border:1px solid var(--border);aspect-ratio:4/3;transition:transform .35s cubic-bezier(.23,1,.32,1),box-shadow .35s,border-color .3s}
+.gal-img-wrap:hover{transform:translateY(-5px) scale(1.02);box-shadow:0 18px 48px rgba(0,0,0,.55);border-color:rgba(56,189,248,.3)}
+.gal-hero{aspect-ratio:16/9}
+.gal-grid-6 .gal-hero,.gal-grid-7 .gal-hero,.gal-grid-5 .gal-hero{grid-column:span 2}
+.gal-img-wrap img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;transition:transform .5s ease}
+.gal-img-wrap:hover img{transform:scale(1.07)}
+
+.gal-overlay{position:absolute;inset:0;background:rgba(9,14,26,.5);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s;backdrop-filter:blur(2px)}
+.gal-img-wrap:hover .gal-overlay{opacity:1}
+.gal-overlay i{width:44px;height:44px;border-radius:50%;background:rgba(56,189,248,.15);border:2px solid rgba(56,189,248,.5);display:flex;align-items:center;justify-content:center;font-size:.9rem;color:var(--accent);transform:scale(.7);transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.gal-img-wrap:hover .gal-overlay i{transform:scale(1)}
+
+/* Lightbox */
+.gal-lb{display:none;position:fixed;inset:0;z-index:9100;align-items:center;justify-content:center;padding:20px}
+.gal-lb.on{display:flex;animation:overlay-in .25s ease}
+.gal-lb-bg{position:absolute;inset:0;background:rgba(4,8,18,.94);backdrop-filter:blur(20px)}
+.gal-lb-box{position:relative;z-index:1;background:var(--surface2);border:1px solid rgba(56,189,248,.2);border-radius:20px;width:100%;max-width:860px;max-height:92vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,.8);animation:modal-up .35s cubic-bezier(.23,1,.32,1)}
+.gal-lb-head{display:flex;align-items:center;justify-content:space-between;padding:13px 18px;background:rgba(9,14,26,.65);border-bottom:1px solid rgba(56,189,248,.1);flex-shrink:0;gap:12px}
+.gal-lb-title{font-size:.84rem;font-weight:700;color:var(--text);flex:1}
+.gal-lb-close{width:32px;height:32px;border-radius:9px;background:transparent;border:1px solid rgba(255,255,255,.1);color:var(--sub);font-size:.82rem;cursor:none;display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s,transform .2s}
+.gal-lb-close:hover{background:rgba(239,68,68,.14);color:#ef4444;transform:rotate(90deg)}
+.gal-lb-body{flex:1;overflow:hidden;min-height:0;background:#060a10;display:flex;align-items:center;justify-content:center;padding:16px}
+.gal-lb-body img{max-width:100%;max-height:72vh;border-radius:10px;display:block;object-fit:contain;margin:auto;user-select:none}
+.gal-lb-foot{padding:10px 18px;border-top:1px solid rgba(56,189,248,.08);background:rgba(9,14,26,.5);flex-shrink:0;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.gal-lb-hint{font-size:.63rem;color:var(--muted);display:flex;align-items:center;gap:6px}
+.gal-lb-hint i{font-size:.58rem;color:var(--accent);opacity:.6}
+.gal-lb-nav{display:flex;align-items:center;gap:10px}
+.gal-lb-nav-btn{width:32px;height:32px;border-radius:9px;background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);color:var(--accent);font-size:.8rem;cursor:none;display:flex;align-items:center;justify-content:center;transition:background .2s,border-color .2s,transform .2s}
+.gal-lb-nav-btn:hover{background:rgba(56,189,248,.18);border-color:var(--accent);transform:scale(1.08)}
+.gal-lb-counter{font-size:.72rem;color:var(--sub);min-width:36px;text-align:center}
+
+/* Responsive */
+@media(max-width:960px){
+  .gal-grid-6,.gal-grid-7{grid-template-columns:repeat(2,1fr)}
+  .gal-grid-5{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:640px){
+  .gal-lb-hint{display:none}
+  .gal-tab-name{font-size:.75rem}
+}
   </style>
 </head>
 <body>
@@ -841,6 +912,7 @@
     <li><a href="#certificates">Certificates</a></li>
     <li><a href="#academic">Academic</a></li>
     <li><a href="#cv">CV</a></li>
+    <li><a href="#gallery">Gallery</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
 </nav>
@@ -1329,6 +1401,232 @@
   </div>
 </section>
 
+<section class="section" id="gallery">
+  <p class="sec-eyebrow">Behind the Scenes</p>
+  <h2 class="sec-title">Activity Gallery</h2>
+
+  <div class="gal-tabs-wrap">
+    <div class="gal-tabs">
+      <button class="gal-tab active" data-tab="himasi24">
+        <span class="gal-tab-dot" style="background:#38bdf8"></span>
+        <span class="gal-tab-name">HIMASI 2024</span>
+        <span class="gal-tab-count">6</span>
+      </button>
+      <button class="gal-tab" data-tab="p2k">
+        <span class="gal-tab-dot" style="background:#818cf8"></span>
+        <span class="gal-tab-name">P2K FAST</span>
+        <span class="gal-tab-count">5</span>
+      </button>
+      <button class="gal-tab" data-tab="respect">
+        <span class="gal-tab-dot" style="background:#fbbf24"></span>
+        <span class="gal-tab-name">RESPECT XIV</span>
+        <span class="gal-tab-count">7</span>
+      </button>
+      <button class="gal-tab" data-tab="himasi25">
+        <span class="gal-tab-dot" style="background:#10b981"></span>
+        <span class="gal-tab-name">HIMASI 2025</span>
+        <span class="gal-tab-count">5</span>
+      </button>
+      <button class="gal-tab" data-tab="creatin">
+        <span class="gal-tab-dot" style="background:#f472b6"></span>
+        <span class="gal-tab-name">CREATE-IN 5.0</span>
+        <span class="gal-tab-count">6</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="gal-panels">
+
+    <!-- HIMASI 2024 -->
+    <div class="gal-panel active" id="panel-himasi24">
+      <div class="gal-panel-meta">
+        <div class="gal-panel-badge" style="--c:#38bdf8"><i class="fas fa-users"></i> Sekretaris &amp; Bendahara Divisi PBSDM</div>
+        <span class="gal-panel-period"><i class="fas fa-calendar-alt"></i> Jun – Des 2024</span>
+      </div>
+      <div class="gal-grid gal-grid-6">
+        <div class="gal-img-wrap gal-hero" onclick="galOpen('assets/HIMASI 2024/foto1.jpeg')">
+          <img src="assets/HIMASI 2024/foto1.jpeg" alt="HIMASI 2024">
+          <div class="gal-overlay"><i class="fas fa-expand-alt"></i></div>
+        </div>
+        <div class="gal-img-wrap" onclick="galOpen('assets/HIMASI 2024/foto2.jpg')">
+          <img src="assets/HIMASI 2024/foto2.jpg" alt="HIMASI 2024">
+          <div class="gal-overlay"><i class="fas fa-expand-alt"></i></div>
+        </div>
+        <div class="gal-img-wrap" onclick="galOpen('assets/HIMASI 2024/foto3.jpeg')">
+          <img src="assets/HIMASI 2024/foto3.jpeg" alt="HIMASI 2024">
+          <div class="gal-overlay"><i class="fas fa-expand-alt"></i></div>
+        </div>
+        <div class="gal-img-wrap" onclick="galOpen('assets/HIMASI 2024/foto4.jpg')">
+          <img src="assets/HIMASI 2024/foto4.jpg" alt="HIMASI 2024">
+          <div class="gal-overlay"><i class="fas fa-expand-alt"></i></div>
+        </div>
+        <div class="gal-img-wrap" onclick="galOpen('assets/HIMASI 2024/foto5.jpg')">
+          <img src="assets/HIMASI 2024/foto5.jpg" alt="HIMASI 2024">
+          <div class="gal-overlay"><i class="fas fa-expand-alt"></i></div>
+        </div>
+        <div class="gal-img-wrap" onclick="galOpen('assets/HIMASI 2024/foto6.jpg')">
+          <img src="assets/HIMASI 2024/foto6.jpg" alt="HIMASI 2024">
+          <div class="gal-overlay"><i class="fas fa-expand-alt"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- P2K FAST -->
+    <div class="gal-panel" id="panel-p2k">
+      <div class="gal-panel-meta">
+        <div class="gal-panel-badge" style="--c:#818cf8"><i class="fas fa-star"></i> Sie Kreatif</div>
+        <span class="gal-panel-period"><i class="fas fa-calendar-alt"></i> Agu – Sep 2024</span>
+      </div>
+      <div class="gal-grid gal-grid-5">
+        <div class="gal-img-wrap gal-hero" onclick="galOpen('assets/P2K FAST/foto7.jpg')">
+          <img src="assets/P2K FAST/foto7.jpg" alt="P2K FAST">
+          <div class="gal-overlay"><i class="fas fa-expand-alt"></i></div>
+        </div>
+        <div class="gal-img-wrap" onclick="galOpen('assets/P2K FAST/foto8.jpg')">
+          <img src="assets/P2K FAST/foto8.jpg" alt="P2K FAST">
+          <div class="gal-overlay"><i class="fas fa-expand-alt"></i></div>
+        </div>
+        <div class="gal-img-wrap" onclick="galOpen('assets/P2K FAST/foto9.jpg')">
+          <img src="assets/P2K FAST/foto9.jpg" alt="P2K FAST">
+          <div class="gal-overlay"><i class="fas fa-expand-alt"></i></div>
+        </div>
+        <div class="gal-img-wrap" onclick="galOpen('assets/P2K FAST/foto10.jpg')">
+          <img src="assets/P2K FAST/foto10.jpg" alt="P2K FAST">
+          <div class="gal-overlay"><i class="fas fa-expand-alt"></i></div>
+        </div>
+        <div class="gal-img-wrap" onclick="galOpen('assets/P2K FAST/foto11.jpg')">
+          <img src="assets/P2K FAST/foto11.jpg" alt="P2K FAST">
+          <div class="gal-overlay"><i class="fas fa-expand-alt"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESPECT XIV -->
+    <div class="gal-panel" id="panel-respect">
+      <div class="gal-panel-meta">
+        <div class="gal-panel-badge" style="--c:#fbbf24"><i class="fas fa-pen"></i> Sekretaris Umum</div>
+        <span class="gal-panel-period"><i class="fas fa-calendar-alt"></i> Sep – Okt 2024</span>
+      </div>
+      <div class="gal-grid gal-grid-7">
+        <div class="gal-img-wrap gal-hero" onclick="galOpen('assets/RESPECT XIV/foto12.jpg')">
+          <img src="assets/RESPECT XIV/foto12.jpg" alt="RESPECT XIV">
+          <div class="gal-overlay"><i class="fas fa-expand-alt"></i></div>
+        </div>
+        <div class="gal-img-wrap" onclick="galOpen('assets/RESPECT XIV/foto13.jpg')">
+          <img src="assets/RESPECT XIV/foto13.jpg" alt="RESPECT XIV">
+          <div class="gal-overlay"><i class="fas fa-expand-alt"></i></div>
+        </div>
+        <div class="gal-img-wrap" onclick="galOpen('assets/RESPECT XIV/foto14.jpg')">
+          <img src="assets/RESPECT XIV/foto14.jpg" alt="RESPECT XIV">
+          <div class="gal-overlay"><i class="fas fa-expand-alt"></i></div>
+        </div>
+        <div class="gal-img-wrap" onclick="galOpen('assets/RESPECT XIV/foto15.jpg')">
+          <img src="assets/RESPECT XIV/foto15.jpg" alt="RESPECT XIV">
+          <div class="gal-overlay"><i class="fas fa-expand-alt"></i></div>
+        </div>
+        <div class="gal-img-wrap" onclick="galOpen('assets/RESPECT XIV/foto16.jpeg')">
+          <img src="assets/RESPECT XIV/foto16.jpeg" alt="RESPECT XIV">
+          <div class="gal-overlay"><i class="fas fa-expand-alt"></i></div>
+        </div>
+        <div class="gal-img-wrap" onclick="galOpen('assets/RESPECT XIV/foto17.jpeg')">
+          <img src="assets/RESPECT XIV/foto17.jpeg" alt="RESPECT XIV">
+          <div class="gal-overlay"><i class="fas fa-expand-alt"></i></div>
+        </div>
+        <div class="gal-img-wrap" onclick="galOpen('assets/RESPECT XIV/foto18.jpeg')">
+          <img src="assets/RESPECT XIV/foto18.jpeg" alt="RESPECT XIV">
+          <div class="gal-overlay"><i class="fas fa-expand-alt"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HIMASI 2025 -->
+    <div class="gal-panel" id="panel-himasi25">
+      <div class="gal-panel-meta">
+        <div class="gal-panel-badge" style="--c:#10b981"><i class="fas fa-edit"></i> Sekretaris Anggota 1</div>
+        <span class="gal-panel-period"><i class="fas fa-calendar-alt"></i> Mei – Des 2025</span>
+      </div>
+      <div class="gal-grid gal-grid-5">
+        <div class="gal-img-wrap gal-hero" onclick="galOpen('assets/HIMASI 2025/foto19.jpg')">
+          <img src="assets/HIMASI 2025/foto19.jpg" alt="HIMASI 2025">
+          <div class="gal-overlay"><i class="fas fa-expand-alt"></i></div>
+        </div>
+        <div class="gal-img-wrap" onclick="galOpen('assets/HIMASI 2025/foto20.jpg')">
+          <img src="assets/HIMASI 2025/foto20.jpg" alt="HIMASI 2025">
+          <div class="gal-overlay"><i class="fas fa-expand-alt"></i></div>
+        </div>
+        <div class="gal-img-wrap" onclick="galOpen('assets/HIMASI 2025/foto21.jpg')">
+          <img src="assets/HIMASI 2025/foto21.jpg" alt="HIMASI 2025">
+          <div class="gal-overlay"><i class="fas fa-expand-alt"></i></div>
+        </div>
+        <div class="gal-img-wrap" onclick="galOpen('assets/HIMASI 2025/foto22.jpg')">
+          <img src="assets/HIMASI 2025/foto22.jpg" alt="HIMASI 2025">
+          <div class="gal-overlay"><i class="fas fa-expand-alt"></i></div>
+        </div>
+        <div class="gal-img-wrap" onclick="galOpen('assets/HIMASI 2025/foto23.jpg')">
+          <img src="assets/HIMASI 2025/foto23.jpg" alt="HIMASI 2025">
+          <div class="gal-overlay"><i class="fas fa-expand-alt"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CREATE-IN 5.0 -->
+    <div class="gal-panel" id="panel-creatin">
+      <div class="gal-panel-meta">
+        <div class="gal-panel-badge" style="--c:#f472b6"><i class="fas fa-calendar-check"></i> Sie Acara</div>
+        <span class="gal-panel-period"><i class="fas fa-calendar-alt"></i> Jan – Feb 2026</span>
+      </div>
+      <div class="gal-grid gal-grid-6">
+        <div class="gal-img-wrap gal-hero" onclick="galOpen('assets/CREATE-IN 5/foto24.jpg')">
+          <img src="assets/CREATE-IN 5/foto24.jpg" alt="CREATE-IN 5.0">
+          <div class="gal-overlay"><i class="fas fa-expand-alt"></i></div>
+        </div>
+        <div class="gal-img-wrap" onclick="galOpen('assets/CREATE-IN 5/foto25.jpg')">
+          <img src="assets/CREATE-IN 5/foto25.jpg" alt="CREATE-IN 5.0">
+          <div class="gal-overlay"><i class="fas fa-expand-alt"></i></div>
+        </div>
+        <div class="gal-img-wrap" onclick="galOpen('assets/CREATE-IN 5/foto26.jpg')">
+          <img src="assets/CREATE-IN 5/foto26.jpg" alt="CREATE-IN 5.0">
+          <div class="gal-overlay"><i class="fas fa-expand-alt"></i></div>
+        </div>
+        <div class="gal-img-wrap" onclick="galOpen('assets/CREATE-IN 5/foto27.jpg')">
+          <img src="assets/CREATE-IN 5/foto27.jpg" alt="CREATE-IN 5.0">
+          <div class="gal-overlay"><i class="fas fa-expand-alt"></i></div>
+        </div>
+        <div class="gal-img-wrap" onclick="galOpen('assets/CREATE-IN 5/foto28.jpg')">
+          <img src="assets/CREATE-IN 5/foto28.jpg" alt="CREATE-IN 5.0">
+          <div class="gal-overlay"><i class="fas fa-expand-alt"></i></div>
+        </div>
+        <div class="gal-img-wrap" onclick="galOpen('assets/CREATE-IN 5/foto29.jpg')">
+          <img src="assets/CREATE-IN 5/foto29.jpg" alt="CREATE-IN 5.0">
+          <div class="gal-overlay"><i class="fas fa-expand-alt"></i></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- GALLERY LIGHTBOX -->
+<div class="gal-lb" id="galLb">
+  <div class="gal-lb-bg" onclick="galClose()"></div>
+  <div class="gal-lb-box">
+    <div class="gal-lb-head">
+      <span class="gal-lb-title" id="galLbTitle"></span>
+      <button class="gal-lb-close" onclick="galClose()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="gal-lb-body" id="galLbBody"></div>
+    <div class="gal-lb-foot">
+      <span class="gal-lb-hint"><i class="fas fa-keyboard"></i> Esc untuk menutup &nbsp;·&nbsp; ← → navigasi</span>
+      <div class="gal-lb-nav">
+        <button class="gal-lb-nav-btn" id="galPrev" onclick="galNav(-1)"><i class="fas fa-chevron-left"></i></button>
+        <span class="gal-lb-counter" id="galCounter"></span>
+        <button class="gal-lb-nav-btn" id="galNext" onclick="galNav(1)"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <!-- FOOTER -->
 <footer class="site-footer" id="contact">
   <div class="footer-body">
@@ -1355,6 +1653,7 @@
         <a href="#certificates"><i class="fas fa-chevron-right"></i> Certificates</a>
         <a href="#academic"><i class="fas fa-chevron-right"></i> Academic Documents</a>
         <a href="#cv"><i class="fas fa-chevron-right"></i> CV</a>
+        <a href="#gallery"><i class="fas fa-chevron-right"></i> Gallery</a>
       </div>
     </div>
     <div>
