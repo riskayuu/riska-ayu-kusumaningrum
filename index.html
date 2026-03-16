@@ -261,6 +261,321 @@
     .ach-year{margin-left:auto;font-size:4rem;font-weight:800;color:rgba(251,191,36,.1);line-height:1;flex-shrink:0;transition:color .3s}
     .ach-card:hover .ach-year{color:rgba(251,191,36,.18)}
 
+
+/* ===== CERTIFICATES SECTION ===== */
+.cert-scroll {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding: 4px 2px 20px;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  cursor: grab;
+}
+.cert-scroll::-webkit-scrollbar { display: none; }
+.cert-scroll.dragging { cursor: grabbing; }
+
+/* Scroll indicator */
+.cert-scrollbar-wrap {
+  margin-top: 20px;
+  padding: 0 2px;
+}
+.cert-scrollbar-track {
+  width: 100%;
+  height: 3px;
+  background: rgba(56,189,248,.1);
+  border-radius: 100px;
+  position: relative;
+  overflow: hidden;
+}
+.cert-scrollbar-thumb {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: width .2s ease, left .1s ease;
+  box-shadow: 0 0 8px rgba(56,189,248,.5);
+  min-width: 40px;
+}
+
+/* Card */
+.cert-card {
+  flex: 0 0 220px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  transition: transform .35s cubic-bezier(.23,1,.32,1), border-color .25s, box-shadow .3s;
+  user-select: none;
+}
+.cert-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(56,189,248,.38);
+  box-shadow: 0 20px 44px rgba(0,0,0,.5);
+}
+.cert-card::after {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .35s ease;
+}
+.cert-card:hover::after { transform: scaleX(1); }
+
+/* Thumbnail — untuk file gambar */
+.cert-thumb {
+  width: 100%;
+  height: 145px;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0c1829, #0f1e32);
+  display: block;
+}
+.cert-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+  transition: transform .45s ease;
+}
+.cert-card:hover .cert-thumb img { transform: scale(1.07); }
+
+/* PDF placeholder — untuk file PDF */
+.cert-ph {
+  width: 100%;
+  height: 145px;
+  background: linear-gradient(135deg, #0c1829, #111e35);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  overflow: hidden;
+}
+.cert-ph-dots {
+  position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(56,189,248,.055) 1px, transparent 1px);
+  background-size: 14px 14px;
+  pointer-events: none;
+}
+.cert-ph i {
+  font-size: 1.5rem;
+  color: rgba(56,189,248,.4);
+  position: relative; z-index: 1;
+  transition: color .25s, transform .3s;
+}
+.cert-card:hover .cert-ph i {
+  color: rgba(56,189,248,.8);
+  transform: scale(1.18);
+}
+.cert-ph-lbl {
+  font-size: .55rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  color: rgba(56,189,248,.2);
+  text-transform: uppercase;
+  position: relative; z-index: 1;
+}
+
+/* Zoom overlay — muncul saat hover di atas thumb/ph */
+.cert-overlay {
+  position: absolute; inset: 0;
+  background: rgba(9,14,26,.48);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0;
+  transition: opacity .3s;
+  backdrop-filter: blur(2px);
+  z-index: 3;
+}
+.cert-card:hover .cert-overlay { opacity: 1; }
+.cert-zoom {
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  background: rgba(56,189,248,.14);
+  border: 2px solid rgba(56,189,248,.5);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .95rem;
+  color: var(--accent);
+  transform: scale(.75);
+  transition: transform .3s cubic-bezier(.34,1.56,.64,1);
+}
+.cert-card:hover .cert-zoom { transform: scale(1); }
+
+/* Card info bagian bawah */
+.cert-info { padding: 12px 14px 14px; }
+.cert-org {
+  font-size: .6rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  opacity: .8;
+  margin-bottom: 4px;
+}
+.cert-name {
+  font-size: .8rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: color .25s;
+  margin-bottom: 11px;
+  min-height: 2.1em;
+}
+.cert-card:hover .cert-name { color: var(--accent); }
+.cert-view-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 14px;
+  width: 100%;
+  background: transparent;
+  border: 1px solid rgba(56,189,248,.28);
+  border-radius: 100px;
+  font-size: .7rem;
+  font-weight: 700;
+  color: var(--accent);
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color .25s, transform .2s;
+}
+.cert-view-btn:hover {
+  background: rgba(56,189,248,.1);
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+/* ===== LIGHTBOX ===== */
+.clb {
+  display: none;
+  position: fixed; inset: 0; z-index: 9999;
+  align-items: center; justify-content: center;
+  padding: 20px;
+}
+.clb.on { display: flex; animation: overlay-in .25s ease; }
+@keyframes overlay-in { from { opacity: 0; } to { opacity: 1; } }
+
+.clb-bg {
+  position: absolute; inset: 0;
+  background: rgba(4,8,18,.93);
+  backdrop-filter: blur(20px);
+}
+.clb-box {
+  position: relative; z-index: 1;
+  background: var(--surface2);
+  border: 1px solid rgba(56,189,248,.2);
+  border-radius: 20px;
+  overflow: hidden;
+  width: 100%; max-width: 800px; max-height: 90vh;
+  display: flex; flex-direction: column;
+  box-shadow: 0 40px 100px rgba(0,0,0,.8);
+  animation: modal-up .35s cubic-bezier(.23,1,.32,1);
+}
+@keyframes modal-up {
+  from { opacity: 0; transform: translateY(32px) scale(.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.clb-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 13px 18px;
+  background: rgba(9,14,26,.65);
+  border-bottom: 1px solid rgba(56,189,248,.1);
+  flex-shrink: 0;
+  gap: 12px;
+}
+.clb-title {
+  font-size: .84rem; font-weight: 700; color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  flex: 1;
+}
+.clb-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.clb-open-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 14px;
+  background: rgba(56,189,248,.1);
+  border: 1px solid rgba(56,189,248,.25);
+  border-radius: 100px;
+  font-size: .72rem; font-weight: 700; color: var(--accent);
+  text-decoration: none;
+  transition: background .2s, border-color .2s;
+  white-space: nowrap;
+}
+.clb-open-btn:hover { background: rgba(56,189,248,.2); border-color: var(--accent); }
+.clb-x {
+  width: 32px; height: 32px;
+  border-radius: 9px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.1);
+  color: var(--sub); font-size: .82rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: background .2s, color .2s, transform .2s;
+}
+.clb-x:hover { background: rgba(239,68,68,.14); color: #ef4444; transform: rotate(90deg); }
+
+.clb-body {
+  flex: 1; overflow-y: auto; min-height: 0;
+  background: #06090f;
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 20px;
+}
+.clb-body img {
+  max-width: 100%; max-height: 70vh;
+  border-radius: 10px; display: block;
+  object-fit: contain;
+  margin: auto;
+}
+.clb-body iframe {
+  width: 100%; height: 60vh; min-height: 480px;
+  border: none; border-radius: 10px; display: block;
+}
+
+.clb-foot {
+  padding: 9px 18px;
+  border-top: 1px solid rgba(56,189,248,.08);
+  background: rgba(9,14,26,.5);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px;
+}
+.clb-hint { font-size: .63rem; color: var(--muted); }
+.clb-verified {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 10px;
+  background: rgba(16,185,129,.08);
+  border: 1px solid rgba(16,185,129,.22);
+  border-radius: 100px;
+  font-size: .62rem; font-weight: 700; color: #10b981;
+  white-space: nowrap;
+}
+.clb-verified::before {
+  content: '';
+  width: 5px; height: 5px;
+  background: #10b981; border-radius: 50%;
+  animation: blink 2s infinite;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .cert-card { flex: 0 0 178px; }
+  .cert-thumb, .cert-ph { height: 120px; }
+  .clb-open-btn span { display: none; }
+  .clb-hint { display: none; }
+}
+    
     /* ACADEMIC DOCS */
     .doc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}
     .doc-card{background:var(--surface2);border:1px solid var(--border);border-radius:20px;overflow:hidden;position:relative;transition:transform .4s cubic-bezier(.23,1,.32,1),box-shadow .4s,border-color .3s}
@@ -515,7 +830,7 @@
 
 <!-- NAVBAR -->
 <nav class="navbar">
-  <a href="#home" class="logo">Riska Ayu K.</a>
+  <a href="#home" class="logo">PORTOFOLIO</a>
   <ul class="nav-links" id="navLinks">
     <li><a href="#home">Home</a></li>
     <li><a href="#about">About</a></li>
@@ -523,16 +838,11 @@
     <li><a href="#skills">Skills</a></li>
     <li><a href="#projects">Projects</a></li>
     <li><a href="#achievements">Achievements</a></li>
+    <li><a href="#certificates">Certificates</a></li>
     <li><a href="#academic">Academic</a></li>
     <li><a href="#cv">CV</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
-  <a href="assets/CV Riska Ayu Kusumaningrum.pdf"
-     download="CV Riska Ayu Kusumaningrum.pdf"
-     class="btn-nav-cv">
-    <i class="fas fa-download"></i>
-    <span>Download CV</span>
-  </a>
 </nav>
 
 <!-- HERO -->
@@ -757,7 +1067,7 @@
     </div>
 </section>
 
-<!-- ACHIEVEMENTS -->
+ <!-- ACHIEVEMENTS -->
 <section class="section" id="achievements">
   <p class="sec-eyebrow">Recognition</p>
   <h2 class="sec-title">Achievements</h2>
@@ -771,6 +1081,153 @@
     <div class="ach-year">2024</div>
   </div>
 </section>
+
+<!-- CERTIFICATES -->
+<section class="section section-alt" id="certificates">
+  <p class="sec-eyebrow">My Credentials</p>
+  <h2 class="sec-title">Certificates</h2>
+
+  <div class="cert-scroll" id="certScroll">
+
+        <div class="cert-card" onclick="clbOpen('assets/devcoach-230-web-is-laravel-dead-certificate.png','DevCoach 230 — Is Laravel Dead?','img')">
+      <div class="cert-thumb">
+        <img src="assets/devcoach-230-web-is-laravel-dead-certificate.png" alt="DevCoach 230 — Is Laravel Dead?">
+        <div class="cert-overlay"><div class="cert-zoom"><i class="fas fa-expand-alt"></i></div></div>
+      </div>
+      <div class="cert-info">
+        <p class="cert-org">Dicoding</p>
+        <p class="cert-name">DevCoach 230 — Is Laravel Dead?</p>
+        <button class="cert-view-btn"><i class="fas fa-eye"></i> View Certificate</button>
+      </div>
+    </div>
+
+    <div class="cert-card" onclick="clbOpen('assets/digdaya-x-hackathon-2026-webinar-series-5-program-overview-deep-dive-certificate.png','Digdaya x Hackathon 2026 — Webinar #5','img')">
+      <div class="cert-thumb">
+        <img src="assets/digdaya-x-hackathon-2026-webinar-series-5-program-overview-deep-dive-certificate.png" alt="Digdaya x Hackathon 2026 — Webinar #5">
+        <div class="cert-overlay"><div class="cert-zoom"><i class="fas fa-expand-alt"></i></div></div>
+      </div>
+      <div class="cert-info">
+        <p class="cert-org">Dicoding</p>
+        <p class="cert-name">Digdaya x Hackathon 2026 — Webinar #5</p>
+        <button class="cert-view-btn"><i class="fas fa-eye"></i> View Certificate</button>
+      </div>
+    </div>
+
+    <div class="cert-card" onclick="clbOpen('assets/soft-skills.jpg','Soft Skill','img')">
+      <div class="cert-thumb">
+        <img src="assets/soft-skills.jpg" alt="Soft Skills">
+        <div class="cert-overlay"><div class="cert-zoom"><i class="fas fa-expand-alt"></i></div></div>
+      </div>
+      <div class="cert-info">
+        <p class="cert-org">UAD</p>
+        <p class="cert-name">Soft Skill</p>
+        <button class="cert-view-btn"><i class="fas fa-eye"></i> View Certificate</button>
+      </div>
+    </div>
+
+    <div class="cert-card" onclick="clbOpen('assets/mini-seminar-it-governance.png','Mini Seminar IT Governance','img')">
+      <div class="cert-thumb">
+        <img src="assets/mini-seminar-it-governance.png" alt="Mini Seminar">
+        <div class="cert-overlay"><div class="cert-zoom"><i class="fas fa-expand-alt"></i></div></div>
+      </div>
+      <div class="cert-info">
+        <p class="cert-org">Sistem Informasi UAD</p>
+        <p class="cert-name">Mini Seminar IT Governance</p>
+        <button class="cert-view-btn"><i class="fas fa-eye"></i> View Certificate</button>
+      </div>
+    </div>
+
+    <div class="cert-card" onclick="clbOpen('assets/Sertifikat Panitia P2K 2024 - Riska Ayu Kusumaningrum - Panitia Fakultas Sains Dan Teknologi Terapan.png','Panitia P2K Fakultas Sains dan Teknologi Terapan 2024','img')">
+      <div class="cert-thumb">
+        <img src="assets/Sertifikat Panitia P2K 2024 - Riska Ayu Kusumaningrum - Panitia Fakultas Sains Dan Teknologi Terapan.png" alt="Panitia P2K FAST 2024">
+        <div class="cert-overlay"><div class="cert-zoom"><i class="fas fa-expand-alt"></i></div></div>
+      </div>
+      <div class="cert-info">
+        <p class="cert-org">FAST UAD</p>
+        <p class="cert-name">Panitia P2K FAST 2024</p>
+        <button class="cert-view-btn"><i class="fas fa-eye"></i> View Certificate</button>
+      </div>
+    </div>
+
+    <div class="cert-card" onclick="clbOpen('assets/Sertifikat Panitia Respect XIV_Riska Ayu Kusumaningrum.png','Panitia Reincarnation of Soul and Power of Creative (RESPECT XIV)','img')">
+      <div class="cert-thumb">
+        <img src="assets/Sertifikat Panitia Respect XIV_Riska Ayu Kusumaningrum.png" alt="Panitia Respect XIV">
+        <div class="cert-overlay"><div class="cert-zoom"><i class="fas fa-expand-alt"></i></div></div>
+      </div>
+      <div class="cert-info">
+        <p class="cert-org">UAD</p>
+        <p class="cert-name">Panitia Respect XIV</p>
+        <button class="cert-view-btn"><i class="fas fa-eye"></i> View Certificate</button>
+      </div>
+    </div>
+
+    <div class="cert-card" onclick="clbOpen('assets/Saudagar Dahlan Muda 2024.png','Pameran Inovasi Kewirausahaan Mahasiswa - Saudagar Dahlan Muda #3 2024','img')">
+      <div class="cert-thumb">
+        <img src="assets/Saudagar Dahlan Muda 2024.png" alt="Saudagar Dahlan Muda 2024">
+        <div class="cert-overlay"><div class="cert-zoom"><i class="fas fa-expand-alt"></i></div></div>
+      </div>
+      <div class="cert-info">
+        <p class="cert-org">Biro Kemahasiswaan dan Alumni UAD</p>
+        <p class="cert-name">Pameran Inovasi Kewirausahaan Mahasiswa Saudagar Dahlan Muda #3 2024</p>
+        <button class="cert-view-btn"><i class="fas fa-eye"></i> View Certificate</button>
+      </div>
+    </div>
+    
+
+    <div class="cert-card" onclick="clbOpen('assets/Sertifikat Pelatihan Literasi Informasi Optimasi Ms Word dan Cek Kesamaan Kata.png','Pelatihan Literasi Informasi Optimasi Ms Word dan Cek Kesamaan Kata','img')">
+      <div class="cert-thumb">
+        <img src="assets/Sertifikat Pelatihan Literasi Informasi Optimasi Ms Word dan Cek Kesamaan Kata.png" alt="Pelatihan Literasi Informasi">
+        <div class="cert-overlay"><div class="cert-zoom"><i class="fas fa-expand-alt"></i></div></div>
+      </div>
+      <div class="cert-info">
+        <p class="cert-org">Perpustakaan UAD</p>
+        <p class="cert-name">Pelatihan Literasi Informasi</p>
+        <button class="cert-view-btn"><i class="fas fa-eye"></i> View Certificate</button>
+      </div>
+    </div>
+
+    <div class="cert-card" onclick="clbOpen('assets/Sertifikat Pengantar Matematika Teori Informasi - KAS3MAT.png','Pengantar Matematika Teori Informasi - KAS3MAT','img')">
+      <div class="cert-thumb">
+        <img src="assets/Sertifikat Pengantar Matematika Teori Informasi - KAS3MAT.png" alt="Pengantar Matematika Teori Informasi">
+        <div class="cert-overlay"><div class="cert-zoom"><i class="fas fa-expand-alt"></i></div></div>
+      </div>
+      <div class="cert-info">
+        <p class="cert-org">KAS3MAT</p>
+        <p class="cert-name">Pengantar Matematika Teori Informasi</p>
+        <button class="cert-view-btn"><i class="fas fa-eye"></i> View Certificate</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="cert-scrollbar-wrap">
+  <div class="cert-scrollbar-track">
+    <div class="cert-scrollbar-thumb" id="certThumb"></div>
+  </div>
+</div>
+
+</section>
+
+<!-- LIGHTBOX MODAL -->
+<div class="clb" id="clb">
+  <div class="clb-bg" onclick="clbClose()"></div>
+  <div class="clb-box">
+    <div class="clb-head">
+      <span class="clb-title" id="clbTitle"></span>
+      <div class="clb-actions">
+        <a href="#" id="clbOpenLink" target="_blank" class="clb-open-btn">
+          <i class="fas fa-arrow-up-right-from-square"></i> Buka File
+        </a>
+        <button class="clb-x" onclick="clbClose()"><i class="fas fa-times"></i></button>
+      </div>
+    </div>
+    <div class="clb-body" id="clbBody"></div>
+    <div class="clb-foot">
+      <span class="clb-hint">Tekan Esc atau klik area gelap untuk menutup</span>
+      <span class="clb-verified">Verified</span>
+    </div>
+  </div>
+</div>
 
 <!-- ACADEMIC DOCUMENTS -->
 <section class="section" id="academic">
@@ -895,6 +1352,7 @@
         <a href="#skills"><i class="fas fa-chevron-right"></i> Skills</a>
         <a href="#projects"><i class="fas fa-chevron-right"></i> Projects</a>
         <a href="#achievements"><i class="fas fa-chevron-right"></i> Achievements</a>
+        <a href="#certificates"><i class="fas fa-chevron-right"></i> Certificates</a>
         <a href="#academic"><i class="fas fa-chevron-right"></i> Academic Documents</a>
         <a href="#cv"><i class="fas fa-chevron-right"></i> CV</a>
       </div>
@@ -910,99 +1368,10 @@
   </div>
   <div class="footer-bottom">
     <p>© 2026 Riska Ayu Kusumaningrum · All rights reserved.</p>
-    <div class="footer-bottom-right">
-      Made with <span class="footer-heart">♥</span>
-      <span class="footer-stack-badge">
-        <i class="fab fa-html5" style="color:#e34f26"></i>&nbsp;HTML &nbsp;·&nbsp;
-        <i class="fab fa-css3-alt" style="color:#264de4"></i>&nbsp;CSS
-      </span>
-    </div>
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  /* Custom Cursor */
-  const dot = document.getElementById('cursor-dot');
-  const ring = document.getElementById('cursor-ring');
-  let mouseX=0,mouseY=0,ringX=0,ringY=0;
-  document.addEventListener('mousemove',e=>{
-    mouseX=e.clientX;mouseY=e.clientY;
-    dot.style.left=mouseX+'px';dot.style.top=mouseY+'px';
-  });
-  (function animateRing(){
-    ringX+=(mouseX-ringX)*.45;ringY+=(mouseY-ringY)*.45;
-    ring.style.left=ringX+'px';ring.style.top=ringY+'px';
-    requestAnimationFrame(animateRing);
-  })();
-  document.querySelectorAll('a,button,.tl-card,.skill-item,.project-card,.doc-card,.ach-card,.about-chip,.footer-social-btn,.footer-contact-item,.footer-links a').forEach(el=>{
-    el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));
-    el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));
-  });
-  document.addEventListener('mousedown',()=>document.body.classList.add('cursor-click'));
-  document.addEventListener('mouseup',()=>document.body.classList.remove('cursor-click'));
-
-  /* Active nav */
-  const navLinks=document.querySelectorAll('.nav-links a');
-  const allSections=document.querySelectorAll('section[id],header[id]');
-  function activateLink(){
-    let current='';
-    allSections.forEach(s=>{if(window.scrollY>=s.offsetTop-90)current=s.id});
-    navLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+current));
-  }
-  window.addEventListener('scroll',activateLink,{passive:true});
-  activateLink();
-
-  /* Scroll reveal */
-  const io=new IntersectionObserver(entries=>{
-    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);}});
-  },{threshold:0.1});
-  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
-
-  /* Force download CV — selalu unduh, tidak pernah buka di tab baru */
-  function forceDownloadCV(url, filename) {
-    fetch(url, { cache: 'no-store' })
-      .then(res => {
-        if (!res.ok) throw new Error('network');
-        return res.arrayBuffer();           // ambil raw bytes
-      })
-      .then(buffer => {
-        // MIME = application/octet-stream → browser WAJIB download, tidak bisa preview
-        const blobUrl = URL.createObjectURL(
-          new Blob([buffer], { type: 'application/octet-stream' })
-        );
-        const a = document.createElement('a');
-        a.style.cssText = 'position:fixed;top:-999px;left:-999px';
-        a.href = blobUrl;
-        a.download = filename;             // nama file saat tersimpan di laptop
-        document.body.appendChild(a);
-        a.click();
-        setTimeout(() => {
-          document.body.removeChild(a);
-          URL.revokeObjectURL(blobUrl);
-        }, 5000);
-      })
-      .catch(() => {
-        // Fallback saat fetch gagal (misal file:// lokal) — tetap force download
-        const a = document.createElement('a');
-        a.style.cssText = 'position:fixed;top:-999px;left:-999px';
-        a.href = url;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        setTimeout(() => document.body.removeChild(a), 2000);
-      });
-  }
-
-  /* Attach ke semua tombol CV download */
-  document.querySelectorAll('.btn-nav-cv, .btn-cv-icon').forEach(btn => {
-    btn.addEventListener('click', function(e) {
-      e.preventDefault();
-      const href = this.getAttribute('href');
-      const dl = this.getAttribute('download') || 'CV Riska Ayu Kusumaningrum.pdf';
-      forceDownloadCV(href, dl);
-    });
-  });
-
-</script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script></script>
+<script src="script.js"></script>
 </body>
 </html>
