@@ -30,7 +30,7 @@ const navLinks = document.querySelectorAll('.nav-links a');
 const allSections = document.querySelectorAll('section[id],header[id]');
 function activateLink() {
   let current = '';
-  allSections.forEach(s => { if (window.scrollY >= s.offsetTop - 90) current = s.id; });
+  allSections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) current = s.id; });
   navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
 }
 window.addEventListener('scroll', activateLink, { passive: true });
