@@ -224,6 +224,26 @@
     .skill-item p{font-size:.76rem;color:var(--sub);font-weight:600;transition:color .25s}
     .skill-item:hover p{color:var(--accent)}
 
+    /* SKILLS SUB LABEL */
+    .skills-sub-label{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;margin-top:48px;padding-left:2px}
+
+    /* SOFT SKILLS */
+    .soft-skills-grid{display:grid;grid-template-columns:repeat(3,auto);justify-content:start;gap:8px;margin-bottom:8px}
+    .soft-skill-item{display:inline-flex;align-items:center;padding:6px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:100px;transition:border-color .25s,transform .2s}
+    .soft-skill-item:hover{border-color:rgba(129,140,248,.35);transform:translateY(-2px)}
+    .soft-skill-item span{font-size:.78rem;font-weight:500;color:var(--sub)}
+    .soft-skill-item:hover span{color:var(--text)}
+    .soft-skill-icon{display:none}
+
+    /* LANGUAGES */
+    .lang-grid{display:flex;align-items:center;gap:0;margin-bottom:8px}
+    .lang-item{display:inline-flex;align-items:center;gap:7px}
+    .lang-sep{width:1px;height:13px;background:rgba(255,255,255,.1);margin:0 18px}
+    .lang-flag{font-size:.95rem;line-height:1}
+    .lang-name{font-size:.78rem;font-weight:500;color:var(--sub)}
+    .lang-dot{width:3px;height:3px;border-radius:50%;background:var(--muted);opacity:.5}
+    .lang-level{font-size:.73rem;color:var(--muted)}
+
     /* PROJECTS */
     .project-list{display:flex;flex-direction:column;gap:20px}
     .project-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:28px 32px;display:grid;grid-template-columns:1fr auto;gap:14px 44px;align-items:start;position:relative;overflow:hidden;transition:transform .35s cubic-bezier(.23,1,.32,1),box-shadow .35s,border-color .3s}
@@ -1086,12 +1106,44 @@
 <section class="section" id="skills">
   <p class="sec-eyebrow">What I Use</p>
   <h2 class="sec-title">Skills &amp; Tools</h2>
-  <div class="skills-grid">
-    <div class="skill-item reveal"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML"><p>HTML</p></div>
-    <div class="skill-item reveal"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS"><p>CSS</p></div>
-    <div class="skill-item reveal"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript"><p>JavaScript</p></div>
-    <div class="skill-item reveal"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React JS"><p>React JS</p></div>
-    <div class="skill-item reveal"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" alt="Figma"><p>Figma</p></div>
+
+  <!-- Technical Skills -->
+  <p class="skills-sub-label reveal">Technical Skills</p>
+  <div class="skills-grid reveal">
+    <div class="skill-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML"><p>HTML</p></div>
+    <div class="skill-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS"><p>CSS</p></div>
+    <div class="skill-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript"><p>JavaScript</p></div>
+    <div class="skill-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React JS"><p>React JS</p></div>
+    <div class="skill-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" alt="Figma"><p>Figma</p></div>
+  </div>
+
+  <!-- Soft Skills -->
+  <p class="skills-sub-label reveal">Soft Skills</p>
+  <div class="soft-skills-grid reveal">
+    <div class="soft-skill-item"><span>Communication</span></div>
+    <div class="soft-skill-item"><span>Teamwork &amp; Collaboration</span></div>
+    <div class="soft-skill-item"><span>Problem Solving</span></div>
+    <div class="soft-skill-item"><span>Time Management</span></div>
+    <div class="soft-skill-item"><span>Willingness to Learn</span></div>
+    <div class="soft-skill-item"><span>Attention to Detail</span></div>
+  </div>
+
+  <!-- Languages -->
+  <p class="skills-sub-label reveal">Languages</p>
+ <div class="lang-grid reveal">
+    <div class="lang-item">
+      <span class="lang-flag">🇮🇩</span>
+      <span class="lang-name">Indonesian</span>
+      <span class="lang-dot"></span>
+      <span class="lang-level">Native</span>
+    </div>
+    <div class="lang-sep"></div>
+    <div class="lang-item">
+      <span class="lang-flag">🇬🇧</span>
+      <span class="lang-name">English</span>
+      <span class="lang-dot"></span>
+      <span class="lang-level">Intermediate</span>
+    </div>
   </div>
 </section>
 
